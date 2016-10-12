@@ -1,0 +1,40 @@
+<ion-header no-border-bottom>
+  <ion-toolbar no-border-bottom>
+    <ion-buttons end>
+      <button ion-button clear (click)="goToAboutPage()">
+        <ion-icon name="information-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager>
+
+    <ion-slide>
+      <ion-icon name="ios-camera-outline"></ion-icon>
+      <h1>Ta en bild av <br/>produktens streckkod</h1>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-icon name="ios-paper-outline"></ion-icon>
+      <h1>Läs om vad <br/>produkten innehåller</h1>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-icon name="ios-nutrition-outline"></ion-icon>
+      <h1>Ät och njut av <br/>din vegetariska mat</h1>
+    </ion-slide>
+
+  </ion-slides>
+</ion-content>
+
+<ion-footer no-border-top>
+  <ion-toolbar no-border-top center text-center>
+    <button id="take-photo-button" ion-button block color="primary" (click)="scanBarcode()">Ta en bild</button>
+    <button id="search-button" ion-button clear icon-left>
+      <ion-icon name="search"></ion-icon>
+      Sök bland produkter
+      </button>
+  </ion-toolbar>
+</ion-footer>

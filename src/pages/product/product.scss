@@ -1,0 +1,108 @@
+page-product {
+
+	ion-header {
+		ion-title {
+			font-family: 'ITCBaileySansCom-Bold';
+		}
+	}
+
+	ion-list {
+		margin-bottom: 0px !important;
+
+		ion-item {
+			padding: 0 !important;
+
+			&.warning {
+				display: block;
+				background-color: #ffc900;
+				color: white;
+
+				ion-label {
+					margin: 4px 8px 5px 0;
+
+					h2 {
+						font-weight: 600;
+					}
+				}
+
+				.item-inner {
+					border-bottom: 2px;
+				}
+			}
+
+			&.flagged {
+				display: block;
+				background-color: #ffc900;
+				color: white;
+
+				ion-label {
+					margin: 4px 8px 5px 0;
+
+					h2 {
+						font-weight: 600;
+					}
+				}
+
+				.item-inner {
+					border-bottom: 2px;
+				}
+			}
+
+			.item-inner {
+				padding: .5em 1em;
+			}
+
+		 	img.veg-icon {
+		 		margin: auton;
+		 		max-height: 150px;
+		 	}
+
+		 	h1 {
+				font-family: 'ITCBaileySansCom-Bold';
+				font-size: 1.5em;
+				font-weight: 600;
+				margin: 0;
+			}
+
+			h2 {
+				margin: 0.5em 0;
+			}
+
+			&.title, &.comment {
+				ion-label {
+					white-space: normal;
+
+					h2 {
+						color: #000;
+					}
+
+					p {
+						font-size: 1em;
+  						margin: .5em 0 0 0;
+						color: #aeacb4;
+					}
+				}
+			}
+
+			.item-button {
+				height: 48px !important;
+  				font-size: 1em !important;
+			}
+		}
+	}
+
+	ion-grid {
+		ion-row {
+			ion-col {
+				img {
+					opacity: .25;
+
+					&.active {
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+
+}

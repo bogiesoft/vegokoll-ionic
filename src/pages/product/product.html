@@ -1,0 +1,64 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-title>
+			Produktinformation
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+
+	<ion-list *ngIf="product">
+
+		<ion-item class="warning" *ngIf="!product.approved" text-center>
+	  	<h2>Väntar på godkännande!</h2>
+	 	</ion-item>
+	 	
+		<ion-item class="flagged" *ngIf="product.flagged" text-center>
+	  	<h2>Anmäld som felaktig!</h2>
+	 	</ion-item>
+	 	
+		<ion-item text-center>
+			<p><img class="veg-icon" src="assets/images/{{veganOrNot()}}" /></p>
+		</ion-item>
+		<ion-item class="title">
+			<h1>{{product.title}}</h1>
+			<h2>{{product.subtitle}}</h2>
+		</ion-item>
+		<ion-item>
+			<h2>Tillverkare</h2>
+			<ion-note item-right>{{product.brand}}</ion-note>
+		</ion-item>
+		<ion-item>
+			<h2>Kategori</h2>
+			<ion-note item-right>{{product.category}}</ion-note>
+		</ion-item>
+		<ion-item>
+			<h2>EAN Kod</h2>
+			<ion-note item-right>{{product.gtin}}</ion-note>
+		</ion-item>
+		<ion-item class="comment" *ngIf="product.general_comment">
+			<h2>Kommentar</h2>
+			<p>{{product.general_comment}}</p>
+		</ion-item>
+		<ion-item>
+			<h2>Innehållsinformation</h2>
+			<p *ngIf="product.ingredients.contains_eggs">Innehåller ägg.</p>
+			<p *ngIf="product.ingredients.contains_animal_milk">Innehåller mjölkprodukter.</p>
+			<p *ngIf="product.ingredients.contains_animal_ingredients">Innehåller animaliska ingredienser.</p>
+			<p *ngIf="product.other.contains_traces_of_eggs">Kan innehålla spår av ägg.</p>
+			<p *ngIf="product.other.contains_traces_of_milk">Kan innehålla spår av mjölk.</p>
+			<p *ngIf="product.ingredients.additives_may_come_from_animal_origin">Produkten innehåller ingredienser som i sällsynta fall har animaliskt ursprung.</p>
+			<ion-grid>
+				<ion-row>
+					<ion-col width-33><img src="assets/images/icon-glutenfree.png" [class.active]="product.ingredients.gluten_free" /></ion-col>
+					<ion-col width-33><img src="assets/images/icon-organic.png" [class.active]="product.other.organic" /></ion-col>
+					<ion-col width-33><img src="assets/images/icon-lactosefree.png" [class.active]="lactoseFree()" /></ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-item>
+		<ion-item padding>
+			<button ion-button color="danger" outline block (click)="flagProduct()">Anmäl felaktighet</button>
+		</ion-item>
+	</ion-list>
+</ion-content>
