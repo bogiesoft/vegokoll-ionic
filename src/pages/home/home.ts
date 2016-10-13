@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { BarcodeScanner } from 'ionic-native';
 import { AboutPage } from '../about/about';
 import { ProductPage } from '../product/product';
+import { SearchPage } from '../search/search';
 
 @Component({
   selector: 'page-home',
@@ -29,6 +30,7 @@ export class HomePage {
       }
     }, (err) => {
         alert('Oj, något gick fel!');
+        this.navCtrl.push(ProductPage, {ean: "7393061001547"});
     });
   }
 
@@ -36,6 +38,12 @@ export class HomePage {
     //push another page onto the history stack
     //causing the nav controller to animate the new page in
     this.navCtrl.push(AboutPage);
+  }
+
+  goToSearchPage(): void {
+    //push another page onto the history stack
+    //causing the nav controller to animate the new page in
+    this.navCtrl.push(SearchPage);
   }
 
 }

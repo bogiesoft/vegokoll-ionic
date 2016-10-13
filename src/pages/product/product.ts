@@ -15,21 +15,20 @@ export class ProductPage {
 
   constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http) {
   	let ean = params.get('ean');
+    let query = {"gtin": ean};
+
     this.loader = this.loadingCtrl.create({
       content: "Laddar..."
     });
 
     this.showLoading();
 
-    alert('https://vegokoll-rest.herokuapp.com/products/' + ean);
-
-  	this.http.get('https://vegokoll-rest.herokuapp.com/products/' + ean)
+  	this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + JSON.stringify(query) + '&limit=1' )
 		.map(res => res.json())
 		.subscribe(data => {
 			// we've got back the raw data, now generate the core schedule data
 			// and save the data for later reference
-			this.product = data;
-      alert( JSON.stringify(data) );
+			this.product = data[0];
       this.loader.dismissAll();
 		});
   }
@@ -42,7 +41,7 @@ export class ProductPage {
     var product = this.product;
     if ( product.hundred_procent_vegan == true ) {
       return 'icon-100-vegan.png';
-    } else if ( product.ingredients.contains_eggs ) {
+    } else if ( product.ingredients && product.ingredients.contains_eggs ) {
       return 'icon-ovo.png';
     } else if ( product.ingredients.contains_animal_milk ) {
       return 'icon-lacto.png';

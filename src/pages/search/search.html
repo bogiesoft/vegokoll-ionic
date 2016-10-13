@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Sök produkter</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="searchProducts($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-list>
+		<ion-item *ngFor="let product of products" padding (click)="showProduct(product.gtin)">
+	  		<h2>{{product.title}}</h2>
+	  		<h3 *ngIf="product.subtitle">{{product.subtitle}}</h3>
+	 	</ion-item>
+	</ion-list>
+	<div padding>
+		<button ion-button color="primary" outline block  (click)="showMore()">Visa fler +</button>
+	</div>
+</ion-content>

@@ -4,13 +4,15 @@ import { Vegokoll } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ProductPage } from '../pages/product/product';
 import { HomePage } from '../pages/home/home';
+import { SearchPage } from '../pages/search/search';
 
 @NgModule({
   declarations: [
     Vegokoll,
     AboutPage,
     ProductPage,
-    HomePage
+    HomePage,
+    SearchPage
   ],
   imports: [
     IonicModule.forRoot(Vegokoll, {
@@ -22,7 +24,8 @@ import { HomePage } from '../pages/home/home';
     Vegokoll,
     HomePage,
     AboutPage,
-    ProductPage
+    ProductPage,
+    SearchPage
   ],
   providers: []
 })

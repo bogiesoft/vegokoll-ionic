@@ -32,8 +32,8 @@
 <ion-footer no-border-top>
   <ion-toolbar no-border-top center text-center>
     <button id="take-photo-button" ion-button block color="primary" (click)="scanBarcode()">Ta en bild</button>
-    <button id="search-button" ion-button clear icon-left>
-      <ion-icon name="search"></ion-icon>
+    <button id="search-button" ion-button clear icon-left (click)="goToSearchPage()">
+      <ion-icon name="md-search"></ion-icon>
       Sök bland produkter
       </button>
   </ion-toolbar>
