@@ -1,0 +1,30 @@
+<ion-header>
+	<ion-navbar color="primary" border-bottom-no>
+		<ion-title>Sök produkter</ion-title>
+		<ion-buttons end>
+	      	<button ion-button (click)="showCheckbox()">
+	        	<ion-icon name="options"></ion-icon>
+	      	</button>
+	    </ion-buttons>
+	</ion-navbar>
+
+	<ion-toolbar color="primary" border-top-no>
+		<ion-searchbar (input)="searchProducts($event)"></ion-searchbar>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-list>
+
+		<ion-item *ngFor="let product of products" padding (click)="showProduct(product.gtin)">
+			<h2>{{product.title}}</h2>
+			<h3 *ngIf="product.subtitle">{{product.subtitle}}</h3>
+			<ion-note item-right>{{product.category}}</ion-note>
+		</ion-item>
+
+	</ion-list>
+
+	<ion-infinite-scroll (ionInfinite)="showMore($event)">
+  	<ion-infinite-scroll-content></ion-infinite-scroll-content>
+ 	</ion-infinite-scroll>
+</ion-content>

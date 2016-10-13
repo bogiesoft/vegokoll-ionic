@@ -1,0 +1,34 @@
+page-products {
+
+	ion-header {
+
+		ion-title {
+			font-family: 'ITCBaileySansCom-Bold';
+		}
+
+		ion-navbar {
+			.toolbar-background {
+				border: none;
+			}
+
+			ion-icon {
+				font-size: 1.7em;
+			}
+		}
+
+		ion-toolbar {
+			.toolbar-background {
+				border: none;
+				border-bottom: 2px solid;
+			}
+		}
+	}
+
+	ion-select {
+		display: inline-flex;
+	}
+
+	ion-list {
+		margin-bottom: 0 !important;
+	}
+}

@@ -29,9 +29,9 @@
 			<h2>Tillverkare</h2>
 			<ion-note item-right>{{product.brand}}</ion-note>
 		</ion-item>
-		<ion-item>
+		<ion-item *ngIf="category">
 			<h2>Kategori</h2>
-			<ion-note item-right>{{product.category}}</ion-note>
+			<ion-note item-right>{{category.name}}</ion-note>
 		</ion-item>
 		<ion-item>
 			<h2>EAN Kod</h2>

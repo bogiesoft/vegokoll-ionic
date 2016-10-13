@@ -1,10 +1,12 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar color="primary" border-bottom-no>
+    <ion-buttons start>
+      <button ion-button clear>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Sök produkter</ion-title>
   </ion-navbar>
-  <ion-toolbar>
-    <ion-searchbar (ionInput)="searchProducts($event)"></ion-searchbar>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content>
@@ -15,6 +17,8 @@
 	 	</ion-item>
 	</ion-list>
 	<div padding>
-		<button ion-button color="primary" outline block  (click)="showMore()">Visa fler +</button>
+		<button ion-button color="primary" clear block (click)="showMore()">
+			Visa fler produkter
+		</button>
 	</div>
 </ion-content>

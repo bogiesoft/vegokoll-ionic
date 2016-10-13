@@ -11,26 +11,41 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class ProductPage {
   public product:any;
+  public category:any;
   public loader:any;
 
   constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http) {
-  	let ean = params.get('ean');
-    let query = {"gtin": ean};
-
     this.loader = this.loadingCtrl.create({
       content: "Laddar..."
     });
 
     this.showLoading();
+    this.loadProduct(params.get('ean'));
+  }
 
-  	this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + JSON.stringify(query) + '&limit=1' )
-		.map(res => res.json())
-		.subscribe(data => {
-			// we've got back the raw data, now generate the core schedule data
-			// and save the data for later reference
-			this.product = data[0];
+  loadCategory( category ): void {
+    let  query = { "code": category }
+    this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/?query=' + JSON.stringify(query) + '&limit=1' )
+    .map(res => res.json())
+    .subscribe(data => {
+      // we've got back the raw data, now generate the core schedule data
+      // and save the data for later reference
+      this.category = data[0];
+    });
+  }
+
+  loadProduct(ean): void {
+    let query = {"gtin": ean};
+
+    this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + JSON.stringify(query) + '&limit=1' )
+    .map(res => res.json())
+    .subscribe(data => {
+      // we've got back the raw data, now generate the core schedule data
+      // and save the data for later reference
+      this.product = data[0];
+      this.loadCategory( this.product.category );
       this.loader.dismissAll();
-		});
+    });
   }
 
   showLoading(): void {
