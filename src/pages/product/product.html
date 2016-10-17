@@ -1,5 +1,5 @@
 <ion-header>
-	<ion-navbar color="primary">
+	<ion-navbar color="primary" border-bottom-no>
 		<ion-title>
 			Produktinformation
 		</ion-title>
@@ -59,8 +59,17 @@
 				</ion-row>
 			</ion-grid>
 		</ion-item>
-		<ion-item padding>
+		<ion-item padding *ngIf="!product.flagged">
 			<button ion-button color="danger" outline block (click)="flagProduct()">Anmäl felaktighet</button>
 		</ion-item>
 	</ion-list>
+
+	<div id="empty" *ngIf="empty">
+		<div class="wrapper">
+			<img src="assets/images/lost-product.png" />
+			<h2 color="primary">Vi hittade inte produkten!</h2>
+			<p>Produkten kunde tyvärr inte hittas i vår databas men du får gärna hjälpa oss genom att fylla i ett enkelt formulär. På så sätt skapar vi tillsammans en komplett databas som kan hjälpa andra som vill äta 100% veganskt.</p>
+			<button ion-button outline color="primary" (click)="openFormModal()">Lägg till produkten</button>
+		</div>
+	</div>
 </ion-content>

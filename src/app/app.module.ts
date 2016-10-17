@@ -5,18 +5,17 @@ import { AboutPage } from '../pages/about/about';
 import { ProductPage } from '../pages/product/product';
 import { HomePage } from '../pages/home/home';
 import { ProductsPage } from '../pages/products/products';
-import { SearchTab } from '../pages/products/search-tab';
-import { CategoryTab } from '../pages/products/category-tab';
+import { FormModal } from '../pages/product/modal-form';
+import { ProductService } from '../providers/product-service';
 
 @NgModule({
   declarations: [
     Vegokoll,
     AboutPage,
     ProductPage,
+    FormModal,
     HomePage,
-    ProductsPage,
-    SearchTab,
-    CategoryTab
+    ProductsPage
   ],
   imports: [
     IonicModule.forRoot(Vegokoll, {
@@ -29,10 +28,9 @@ import { CategoryTab } from '../pages/products/category-tab';
     HomePage,
     AboutPage,
     ProductPage,
-    ProductsPage,
-    SearchTab,
-    CategoryTab
+    FormModal,
+    ProductsPage
   ],
-  providers: []
+  providers: [ProductService]
 })
 export class AppModule {}

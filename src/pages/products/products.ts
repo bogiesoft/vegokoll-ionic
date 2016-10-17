@@ -1,117 +1,138 @@
-import { Component } from '@angular/core';
-import { AlertController, NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { AlertController, Content, LoadingController, NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { ProductPage } from '../product/product';
+import { ProductService } from '../../providers/product-service';
 import 'rxjs/Rx';
 
-/*
-  Generated class for the Search page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
-  selector: 'page-products',
-  templateUrl: 'products.html'
+	selector: 'page-products',
+	templateUrl: 'products.html'
 })
 
 export class ProductsPage {
-  public products:any;
-  public query:any = {};
-  public limit:any = 20;
-  public sort:any = "title";
-  public categories:any;
-  public querycategories:any = {};
+	@ViewChild(Content) content: Content;
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public http: Http) {
-    this.limit = 20;
+	public products:any = [];
+	public categories:any = [];
+	public count:any = 0;
 
-    this.loadProducts();
-    this.loadCategory();
-  }
+	public query:any = {};
+	public querycategory:any = {};
+	public limit:any = 20;
+	public sort:any = "title";
 
-  loadCategory(): void {
-    this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/' )
-    .map(res => res.json())
-    .subscribe(data => {
-      // we've got back the raw data, now generate the core schedule data
-      // and save the data for later reference
-      this.categories = data;
-    });
-  }
+	public loader:any;
 
-  searchProducts(event:any) {
-    let searchterm = event.target.value;
+	constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public productService: ProductService) {
+		this.limit = 20;
 
-    this.limit = 20;
+		this.loader = this.loadingCtrl.create({
+			content: "Laddar...",
+			dismissOnPageChange: true
+		});
+		this.loader.present();
 
-    if (searchterm && searchterm.trim() != '') {
-      this.query = {
-        "$or" : [
-          { "title" : "~(" + searchterm + ")"},
-          { "subtitle" : "~(" + searchterm + ")"}
-        ]
-      };
+		this.loadCategories();
+		this.loadProducts(null);
+	}
 
-      this.loadProducts();
-    } else {
-      this.query = {};
+	loadCategories(): void {
+		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/' )
+		.map(res => res.json())
+		.subscribe(data => {
+			this.categories = data;
+		});
+	}
 
-      this.loadProducts();
-    }
-  }
+	searchProducts(event:any) {
+		let searchterm = event.target.value;
 
-  loadProducts(): void {
-    let querystring = JSON.stringify(this.query);
+		this.content.scrollToTop();
+		this.limit = 20;
 
-    this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + querystring + '&limit=' + this.limit + '&sort=' + this.sort )
-      .map(res => res.json())
-      .subscribe(data => {
-        // we've got back the raw data, now generate the core schedule data
-        // and save the data for later reference
-        this.products = data;
-      });
-  }
+		if (searchterm && searchterm.trim() != '') {
+			this.query = {
+				"$or" : [
+					{ "title" : "~(" + searchterm + ")"},
+					{ "subtitle" : "~(" + searchterm + ")"}
+				]
+			};
+			this.loadProducts(null);
+		} else {
+			this.query = {};
+			this.loadProducts(null);
+		}
+	}
 
-  showMore(infiniteScroll): void {
-    this.limit = this.limit + 10;
-    let querystring = JSON.stringify(this.query);
+	loadProducts(infiniteScroll): void {
+		let q = {"$and": [this.query, this.querycategory, {"approved": true}]};
 
-    this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + querystring + '&limit=' + this.limit + '&sort=' + this.sort )
-      .map(res => res.json())
-      .subscribe(data => {
-        // we've got back the raw data, now generate the core schedule data
-        // and save the data for later reference
-        this.products = data;
-        infiniteScroll.complete();
-      });
 
-  }
+		this.productService.load(q, this.sort, this.limit)
+		.then(data => {
+			this.products = data;
+			if(infiniteScroll != null){
+				infiniteScroll.complete();
+			}
+		});
 
-  showProduct(ean): void {
-    this.navCtrl.push(ProductPage, {ean: ean});
-  }
+		this.productService.count(q, this.sort, this.limit)
+		.then(data => {
+			this.count = data;
+		});
+	}
 
-  showCheckbox() {
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Visa katekorier');
+	showMore(infiniteScroll): void {
+		this.limit = this.limit + 20;
 
-    this.categories.map(function(category){
-      alert.addInput({
-        type: 'checkbox',
-        label: category.name,
-        value: category.type,
-        checked: true
-      });
-    });
+		if( this.products.length < this.count.count ) {
+			this.loadProducts(infiniteScroll);
+		} else {
+			infiniteScroll.complete();
+		}
+	}
 
-    alert.addButton({
-      text: 'Visa',
-      handler: data => {
-        console.log('Checkbox data:', data);
-      }
-    });
-    alert.present();
-  }
+	showProduct(ean): void {
+		this.navCtrl.push(ProductPage, {ean: ean});
+	}
 
+	categoryNameByCode(code) {
+		return this.categories.filter(function(v) {
+		    return v.code === code; // Filter out the appropriate one
+		})[0]
+	}
+
+	isVegan(product) {
+		if ( product.manufacturer_confirms_vegan || ( product.ingredients.additives_may_come_from_animal_origin != true && product.ingredients.contains_animal_additives != true && product.ingredients.contains_eggs != true && product.ingredients.contains_animal_milk != true && product.ingredients.contains_animal_ingredients != true ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	showCheckbox() {
+		let options = {inputs:[]};
+		let querycategory = this.querycategory;
+
+		let checked = (null == querycategory.category ) ? true : false ;
+		options.inputs = [{ name : 'options', value: 'alla', label: 'Alla', type: 'radio', checked: checked }];
+
+    	this.categories.map(function(category){ 
+    		checked = (category.code == querycategory.category ) ? true : false ;
+		  options.inputs.push({ name : 'options', value: category.code, label: category.name, type: 'radio', checked: checked });
+		});
+
+		let alert = this.alertCtrl.create(options);
+
+		alert.setTitle('Visa katekorier');
+
+		alert.addButton({
+			text: 'Visa',
+			handler: data => {
+				this.querycategory = (data=="alla") ? {} : {"category": data};
+				this.loadProducts(null);
+			}
+		});
+		alert.present();
+	}
 }

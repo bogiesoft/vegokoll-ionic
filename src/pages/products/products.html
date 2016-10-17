@@ -1,6 +1,6 @@
 <ion-header>
 	<ion-navbar color="primary" border-bottom-no>
-		<ion-title>Sök produkter</ion-title>
+		<ion-title>Sök bland produkter</ion-title>
 		<ion-buttons end>
 	      	<button ion-button (click)="showCheckbox()">
 	        	<ion-icon name="options"></ion-icon>
@@ -8,23 +8,41 @@
 	    </ion-buttons>
 	</ion-navbar>
 
-	<ion-toolbar color="primary" border-top-no>
-		<ion-searchbar (input)="searchProducts($event)"></ion-searchbar>
+	<ion-toolbar color="primary" border-top-no border-bottom-no>
+		<ion-searchbar placeholder="Sök efter en produkt" (ionInput)="searchProducts($event)" (ionClear)="searchProducts($event)"></ion-searchbar>
 	</ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="products-content" *ngIf="products">
 	<ion-list>
 
-		<ion-item *ngFor="let product of products" padding (click)="showProduct(product.gtin)">
-			<h2>{{product.title}}</h2>
+    	<ion-list-header>
+		    <ion-label style="display:none;">Sortera</ion-label>
+		    <ion-label>{{count.count}} produkter</ion-label>
+			<ion-select [(ngModel)]="sort" (ionChange)="loadProducts()" cancelText="Ångra" okText="Välj">
+				<ion-option value="title" checked="true">A-z</ion-option>
+				<ion-option value="-title" checked="true">z-A</ion-option>
+				<ion-option value="-created_on">Senaste</ion-option>
+				<ion-option value="created_on">Äldst</ion-option>
+			</ion-select>
+    	</ion-list-header>
+
+		<ion-item *ngFor="let product of products" padding>
+			<h2>{{product.title}} <ion-icon name="md-checkmark-circle" color="secondary" *ngIf="isVegan(product)"></ion-icon><ion-icon name="md-remove-circle"  color="danger" *ngIf="!isVegan(product)"></ion-icon></h2>
 			<h3 *ngIf="product.subtitle">{{product.subtitle}}</h3>
-			<ion-note item-right>{{product.category}}</ion-note>
+			<p class="brand">{{product.brand}}</p>
+			<ion-badge class="category" *ngIf="product.category">{{categoryNameByCode(product.category).name}}</ion-badge>
+			<ion-badge *ngIf="product.other.organic">Ekologisk</ion-badge>
+			<ion-badge *ngIf="product.ingredients.gluten_free">Glutenfritt</ion-badge>
+    		<button ion-button clear item-right (click)="showProduct(product.gtin)">visa</button>
 		</ion-item>
 
-	</ion-list>
+	 	<ion-item-divider light *ngIf="products.length==count.count">
+	 		{{count.count}} produkter
+	 	</ion-item-divider>
 
-	<ion-infinite-scroll (ionInfinite)="showMore($event)">
-  	<ion-infinite-scroll-content></ion-infinite-scroll-content>
+	</ion-list>
+	<ion-infinite-scroll (ionInfinite)="showMore($event)" *ngIf="products.length<count.count">
+  		<ion-infinite-scroll-content></ion-infinite-scroll-content>
  	</ion-infinite-scroll>
 </ion-content>

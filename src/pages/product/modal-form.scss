@@ -1,0 +1,34 @@
+modal-form {
+
+	ion-header {
+		ion-title {
+			font-family: 'ITCBaileySansCom-Bold';
+			font-weight: 400;
+		}
+	}
+
+	ion-list {
+		margin-bottom: 0 !important;
+
+		ion-item:last-of-type {
+  			margin-top: -1px;
+			border-top: 0.55px solid #c8c7cc;
+			.item-inner {
+				border-bottom: none !important;
+			}
+		}
+
+		ion-item-divider {
+			background: #f2fbfd !important;
+  			margin-top: -1px;
+			border-bottom: 0.55px solid #c8c7cc;
+			border-top: 0.55px solid #c8c7cc;
+
+			color: #7f7f7f !important;
+			font-size: 1.2rem !important;
+			font-weight: 500 !important;
+			letter-spacing: 0.1rem !important;
+			text-transform: uppercase !important;
+		}
+	}
+}

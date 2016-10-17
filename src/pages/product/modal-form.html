@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary" border-bottom-no>
+    <ion-title>
+      Lägg till produkt
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+        <span showWhen="ios">Avbryt</span>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<p padding>Fyll i formuläret nedan med den information som finns på produktens förpackning och skicka in till oss, så fixar vi resten.</p>
+  <ion-list>
+
+    <ion-item>
+      EAN-nummer
+      <ion-note item-right>
+        {{product.gtin}}
+      </ion-note>
+    </ion-item>
+    <ion-item-divider light>Produktinformation</ion-item-divider>
+    <ion-item>
+      <ion-label>Produktnamn</ion-label>
+      <ion-input type="text" [(ngModel)]="product.title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Underrubrik</ion-label>
+      <ion-input type="text" [(ngModel)]="product.subtitle"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Tillverkare</ion-label>
+      <ion-input type="text" [(ngModel)]="product.brand"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Kategori</ion-label>
+      <ion-select [(ngModel)]="product.category">
+        <ion-option *ngFor="let category of categories" value="{{category.code}}">{{category.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item-divider light>Innehållsinformation</ion-item-divider>
+    <ion-item>
+      <ion-label>Mjölk</ion-label>
+      <ion-toggle [(ngModel)]="product.ingredients.contains_animal_milk" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Ägg</ion-label>
+      <ion-toggle [(ngModel)]="product.ingredients.contains_eggs" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Andra animaliska ingredienser</ion-label>
+      <ion-toggle [(ngModel)]="product.ingredients.contains_animal_ingredients" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item-divider light>Allergiinformation</ion-item-divider>
+    <ion-item>
+      <ion-label>Spår av mjölk</ion-label>
+      <ion-toggle [(ngModel)]="product.other.contains_traces_of_milk" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Spår av ägg</ion-label>
+      <ion-toggle [(ngModel)]="product.other.contains_traces_of_eggs" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Tillsatser som kan ha animaliskt ursprung</ion-label>
+      <ion-toggle [(ngModel)]="product.ingredients.additives_may_come_from_animal_origin" color="danger" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item-divider light>Märkningar på förpackningen</ion-item-divider>
+    <ion-item>
+      <ion-label>Glutenfri</ion-label>
+      <ion-toggle [(ngModel)]="product.ingredients.gluten_free" color="secondary" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Vegan</ion-label>
+      <ion-toggle [(ngModel)]="product.manufacturer_confirms_vegan" color="secondary" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Vegetarisk (lakto-ovo)</ion-label>
+      <ion-toggle [(ngModel)]="product.manufacturer_confirms_vegetarian" color="secondary" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Ekologisk</ion-label>
+      <ion-toggle [(ngModel)]="product.other.organic" color="secondary" checked="false"></ion-toggle>
+    </ion-item>
+    <ion-item-divider light>Allmänt</ion-item-divider>
+    <ion-item>
+      <ion-label>Kommentar</ion-label>
+      <ion-textarea [(ngModel)]="product.general_comment"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <button ion-button large block (click)="postProduct()" color="primary">Skicka</button>
+    </ion-item>
+
+  </ion-list>
+</ion-content>

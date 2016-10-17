@@ -3,6 +3,7 @@ page-product {
 	ion-header {
 		ion-title {
 			font-family: 'ITCBaileySansCom-Bold';
+			ont-weight: 400;
 		}
 	}
 
@@ -14,7 +15,7 @@ page-product {
 
 			&.warning {
 				display: block;
-				background-color: #ffc900;
+				background-color: #e6007e;
 				color: white;
 
 				ion-label {
@@ -32,7 +33,7 @@ page-product {
 
 			&.flagged {
 				display: block;
-				background-color: #ffc900;
+				background-color: #D83836;
 				color: white;
 
 				ion-label {
@@ -60,7 +61,7 @@ page-product {
 		 	h1 {
 				font-family: 'ITCBaileySansCom-Bold';
 				font-size: 1.5em;
-				font-weight: 600;
+				font-weight: 400;
 				margin: 0;
 			}
 
@@ -100,6 +101,41 @@ page-product {
 					&.active {
 						opacity: 1;
 					}
+				}
+			}
+		}
+	}
+
+	#empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
+
+		.wrapper {
+			padding: 0 50px;
+			text-align: center;
+
+			img {
+				max-height: 200px;
+				opacity: .5;
+			}
+
+			h2 {
+				font-family: 'ITCBaileySansCom-Bold';
+				font-weight: 400;
+			}
+
+			p {
+				opacity: .5;
+				line-height: 1.5em;
+			}
+
+			button {
+				margin-top: 1em;
+				.button-inner {
+					padding-bottom: 0.1em;
 				}
 			}
 		}

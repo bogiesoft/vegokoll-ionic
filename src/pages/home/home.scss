@@ -26,6 +26,7 @@ page-home {
 
 	ion-slides {
 		font-family: 'ITCBaileySansCom-Bold';
+		font-weight: 400;
 
 		ion-slide {
 			ion-icon {
@@ -76,22 +77,22 @@ page-home {
 
 			#take-photo-button {
 				font-size: 125%;
-				font-weight: 600;
+				font-family: 'ITCBaileySansCom-Bold';
+				font-weight: 400;
 				color: #ffffff;
 				text-decoration: none;
 
 				height: 50px;
-				font-family: 'ITCBaileySansCom-Bold';
 			}
 
 			#search-button {
 				background: transparent;
 				font-size: 125%;
-				font-weight: 600;
+				font-family: 'ITCBaileySansCom-Bold';
+				font-weight: 400;
 				color: #ffffff;
 
 				height: 50px;
-				font-family: 'ITCBaileySansCom-Bold';
 			}
 		}
 	}
