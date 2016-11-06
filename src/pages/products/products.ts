@@ -29,7 +29,7 @@ export class ProductsPage {
 
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar...",
-			dismissOnPageChange: true
+			dismissOnPageChange: false
 		});
 		this.loader.present();
 
@@ -72,6 +72,9 @@ export class ProductsPage {
 		this.productService.load(q, this.sort, this.limit)
 		.then(data => {
 			this.products = data;
+
+			this.loader.dismissAll();
+
 			if(infiniteScroll != null){
 				infiniteScroll.complete();
 			}

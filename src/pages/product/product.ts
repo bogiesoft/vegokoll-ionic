@@ -121,4 +121,16 @@ export class ProductPage {
 		modal.present();
 	}
 
+	isFlagged(): boolean {
+		if ( typeof this.product.flagged != 'undefined' ) {
+			if ( this.product.flagged === true ) {
+				return true;
+			} else if ( this.product.flagged.flagged === true ) {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
 }

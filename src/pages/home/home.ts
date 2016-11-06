@@ -30,6 +30,7 @@ export class HomePage {
       }
     }, (err) => {
         alert('Oj, något gick fel!');
+        this.navCtrl.push(ProductPage, {ean: 7312560034214});
     });
   }
 

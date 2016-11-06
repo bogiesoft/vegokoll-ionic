@@ -10,7 +10,34 @@ import { ProductService } from '../../providers/product-service';
 })
 
 export class FormModal {
-	public product:any = { "ingredients": {}, "other": {} };
+  public product:any = {
+    "gtin": Number,
+    "title": "",
+    "subtitle": "",
+    "brand": "",
+    "category": "",
+    "ingredients": {
+      "contains_animal_milk": false,
+      "contains_eggs": false,
+      "contains_animal_ingredients": false,
+      "additives_may_come_from_animal_origin": false,
+      "gluten_free": false
+    },
+    "other": {
+      "animal_tested": false,
+      "contains_traces_of_milk": false,
+      "contains_traces_of_eggs": false,
+      "organic": false
+    },
+    "manufacturer_confirms_vegetarian": false,
+    "manufacturer_confirms_vegan": false,
+    "hundred_procent_vegan": false,
+    "general_comment":"","approved": false,
+    "flagged": {
+      "flagged": false,
+      "message": ""
+    }
+  };
 	public categories:any = [];
 
   constructor (public alertCtrl: AlertController, public viewCtrl: ViewController, public http: Http, private params: NavParams, public productService: ProductService ) {
