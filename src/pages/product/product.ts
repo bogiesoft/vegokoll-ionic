@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from 'ionic-angular';
+import { AlertController, LoadingController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Camera, Transfer } from 'ionic-native';
 import { Http } from '@angular/http';
 import { FormModal } from './modal-form';
+import { ImagesModal } from './modal-images';
 import { ProductService } from '../../providers/product-service';
 
 import 'rxjs/Rx';
 
 import { NavController, NavParams } from 'ionic-angular';
+
+declare var cordova: any;
 
 @Component({
 	selector: 'page-product',
@@ -19,7 +23,11 @@ export class ProductPage {
 	public category:any;
 	public loader:any;
 
-	constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
+	public imageChosen: any = 0;
+	public imagePath: any;
+	public imageNewPath: any;
+
+	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
 		this.gtin = params.get('ean');
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar..."
@@ -51,6 +59,7 @@ export class ProductPage {
 			this.product = data[0];
 			if ( this.product!=null ) {
 				this.loadCategory( this.product.category );
+				this.empty = false;
 			} else {
 				this.empty = true;
 			}
@@ -65,11 +74,11 @@ export class ProductPage {
 	veganOrNot(): string {
 		var product = this.product;
 		if ( product.hundred_procent_vegan == true ) {
-			return 'icon-100-vegan.png';
+			return 'icon-vegan.png';
 		} else if ( product.ingredients && product.ingredients.contains_eggs ) {
-			return 'icon-ovo.png';
+			return 'icon-novegan.png';
 		} else if ( product.ingredients.contains_animal_milk ) {
-			return 'icon-lacto.png';
+			return 'icon-novegan.png';
 		} else if ( product.ingredients.contains_animal_ingredients ) {
 			return 'icon-novegan.png';
 		} else if ( product.manufacturer_confirms_vegan || ( product.ingredients.additives_may_come_from_animal_origin != true && product.ingredients.contains_animal_additives != true && product.ingredients.contains_eggs != true && product.ingredients.contains_animal_milk != true && product.ingredients.contains_animal_ingredients != true ) ) {
@@ -108,7 +117,7 @@ export class ProductPage {
 					text: 'Skicka',
 					handler: data => {
 						this.product.flagged = { "flagged": true, "message": data };
-						this.productService.flag( this.product._id, {"flagged": { "flagged": true, "message": data }} );
+						this.productService.flag( this.product._id, {"flagged": { "flagged": true, "message": data.message }} );
 					}
 				}
 			]
@@ -116,8 +125,16 @@ export class ProductPage {
 		prompt.present();
 	}
 
+	openImagesModal(): void {
+		let modal = this.modalCtrl.create(ImagesModal, {"images": this.product.images});
+		modal.present();
+	}
+
 	openFormModal(): void {
 		let modal = this.modalCtrl.create(FormModal, {"gtin": this.gtin});
+		modal.onDidDismiss(data => {
+		    this.loadProduct(this.gtin);
+		});
 		modal.present();
 	}
 
@@ -133,4 +150,87 @@ export class ProductPage {
 		}
 	}
 
+	chooseImage(): void {
+		
+		let actionSheet = this.actionSheet.create({
+			title: 'Välj bildkälla',
+				buttons: [
+				{
+					text: 'Album',
+					icon: 'albums',
+					handler: () => {
+						this.actionHandler(1);
+					}
+				},
+				{
+					text: 'Kamera',
+					icon: 'camera',
+					handler: () => {
+						this.actionHandler(2);
+					}
+				},
+				{
+					text: 'Avbryt',
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				}
+			]
+		});
+		actionSheet.present();
+	}
+
+	actionHandler(selection: any) {
+		var options: any;
+		if (selection == 1) {
+			options = {
+				quality: 75,
+				destinationType: Camera.DestinationType.FILE_URI,
+				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+				allowEdit: true,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 500,
+				targetHeight: 500,
+				saveToPhotoAlbum: false
+			};
+		} else {
+			options = {
+				quality: 75,
+				destinationType: Camera.DestinationType.FILE_URI,
+				sourceType: Camera.PictureSourceType.CAMERA,
+				allowEdit: true,
+				encodingType: Camera.EncodingType.JPEG,
+				targetWidth: 500,
+				targetHeight: 500,
+				saveToPhotoAlbum: false
+			};
+		}
+
+		Camera.getPicture(options).then((imgUrl) => {
+
+	    var uploadOptions = {
+	       params: { 'upload_preset': 'uymbkjen' }
+	    };
+
+	    const fileTransfer = new Transfer();
+
+			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload',
+      uploadOptions).then((data) => {
+      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
+      	let response = JSON.parse(JSON.stringify(data));
+
+				if( this.product.images == null ){
+					this.product.images = [];
+				}
+
+				this.product.images.push( JSON.parse(response.response) );
+        this.productService.addImage( this.product );
+      }, (err) => {
+        alert(JSON.stringify(err));
+      });
+		}, (err) => {
+			console.log(JSON.stringify(err))
+		});
+	}
 }

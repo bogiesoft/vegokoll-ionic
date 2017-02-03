@@ -1,0 +1,18 @@
+<ion-header no-border-bottom>
+  <ion-toolbar no-border-bottom>
+    <ion-buttons start>
+      <button ion-button clear (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+	
+	<ion-slides *ngIf="images">
+  		<ion-slide *ngFor="let image of images">
+    		<img src="{{image.url}}"/>
+  		</ion-slide>
+  	</ion-slides>
+
+</ion-content>

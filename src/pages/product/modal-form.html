@@ -37,7 +37,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Kategori</ion-label>
-      <ion-select [(ngModel)]="product.category">
+      <ion-select [(ngModel)]="product.category" okText="Välj" cancelText="Avbryt">
         <ion-option *ngFor="let category of categories" value="{{category.code}}">{{category.name}}</ion-option>
       </ion-select>
     </ion-item>

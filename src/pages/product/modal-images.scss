@@ -1,0 +1,21 @@
+modal-images {
+	ion-header {
+		background-color: #000;
+
+		.toolbar-background {
+			background-color: transparent;
+		}
+
+		.bar-button {
+			color: #fff !important;
+
+			ion-icon {
+				font-size: 3.4rem;
+			}
+		}
+	}
+	ion-content {
+		background-color: #000 !important;
+		color: #fff;
+	}
+}

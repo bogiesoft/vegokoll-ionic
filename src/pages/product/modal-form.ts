@@ -20,14 +20,14 @@ export class FormModal {
       "contains_animal_milk": false,
       "contains_eggs": false,
       "contains_animal_ingredients": false,
-      "additives_may_come_from_animal_origin": false,
-      "gluten_free": false
+      "additives_may_come_from_animal_origin": false
     },
     "other": {
       "animal_tested": false,
       "contains_traces_of_milk": false,
       "contains_traces_of_eggs": false,
-      "organic": false
+      "organic": false,
+      "gluten_free": false
     },
     "manufacturer_confirms_vegetarian": false,
     "manufacturer_confirms_vegan": false,
@@ -58,7 +58,6 @@ export class FormModal {
   }
 
   postProduct(): void {
-  	console.log(this.product);
   	if( 
   		this.product.title == null || 
   		this.product.title == "" ||

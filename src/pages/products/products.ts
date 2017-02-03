@@ -66,6 +66,12 @@ export class ProductsPage {
 	}
 
 	loadProducts(infiniteScroll): void {
+
+		this.query["ingredients.contains_animal_milk"] = false;
+		this.query["ingredients.contains_eggs"] = false;
+		this.query["ingredients.contains_animal_ingredients"] = false;
+		this.query["ingredients.additives_may_come_from_animal_origin"] = false;
+
 		let q = {"$and": [this.query, this.querycategory, {"approved": true}]};
 
 
