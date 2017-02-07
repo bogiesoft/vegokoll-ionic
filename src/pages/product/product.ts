@@ -19,6 +19,7 @@ declare var cordova: any;
 export class ProductPage {
 	public gtin:any;
 	public product:any;
+	public images: any = [];
 	public empty:any = false;
 	public category:any;
 	public loader:any;
@@ -27,7 +28,10 @@ export class ProductPage {
 	public imagePath: any;
 	public imageNewPath: any;
 
+	public uploading: boolean;
+
 	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
+		this.uploading = false;
 		this.gtin = params.get('ean');
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar..."
@@ -37,7 +41,14 @@ export class ProductPage {
 		this.loadProduct(this.gtin);
 	}
 
-	loadCategory( category ): void {
+	loadImages(gtin): void {
+		this.productService.getImages(gtin)
+		.then(data => {
+			this.images = data;
+		});
+	}
+
+	loadCategory(category): void {
 		let  query = { "code": category }
 		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/?query=' + JSON.stringify(query) + '&limit=1' )
 		.map(res => res.json())
@@ -59,6 +70,7 @@ export class ProductPage {
 			this.product = data[0];
 			if ( this.product!=null ) {
 				this.loadCategory( this.product.category );
+				this.loadImages( this.product.gtin );
 				this.empty = false;
 			} else {
 				this.empty = true;
@@ -133,6 +145,7 @@ export class ProductPage {
 	openFormModal(): void {
 		let modal = this.modalCtrl.create(FormModal, {"gtin": this.gtin});
 		modal.onDidDismiss(data => {
+			this.product = null;
 		    this.loadProduct(this.gtin);
 		});
 		modal.present();
@@ -151,7 +164,6 @@ export class ProductPage {
 	}
 
 	chooseImage(): void {
-		
 		let actionSheet = this.actionSheet.create({
 			title: 'Välj bildkälla',
 				buttons: [
@@ -188,10 +200,8 @@ export class ProductPage {
 				quality: 75,
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-				allowEdit: true,
+				allowEdit: false,
 				encodingType: Camera.EncodingType.JPEG,
-				targetWidth: 500,
-				targetHeight: 500,
 				saveToPhotoAlbum: false
 			};
 		} else {
@@ -199,10 +209,8 @@ export class ProductPage {
 				quality: 75,
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.CAMERA,
-				allowEdit: true,
+				allowEdit: false,
 				encodingType: Camera.EncodingType.JPEG,
-				targetWidth: 500,
-				targetHeight: 500,
 				saveToPhotoAlbum: false
 			};
 		}
@@ -214,21 +222,21 @@ export class ProductPage {
 	    };
 
 	    const fileTransfer = new Transfer();
-
+	    	this.uploading = true;
 			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload',
-      uploadOptions).then((data) => {
-      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
-      	let response = JSON.parse(JSON.stringify(data));
+      			uploadOptions).then((data) => {
+		      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
+		      	let response = JSON.parse(JSON.stringify(data));
+		      	let image = JSON.parse(response.response);
+		      	image.gtin = this.gtin;
 
-				if( this.product.images == null ){
-					this.product.images = [];
-				}
+				this.loadImages( this.gtin );
+		        this.productService.addImage( image );
 
-				this.product.images.push( JSON.parse(response.response) );
-        this.productService.addImage( this.product );
-      }, (err) => {
-        alert(JSON.stringify(err));
-      });
+	    		this.uploading = false;
+		      }, (err) => {
+		        console.log(JSON.stringify(err));
+		      });
 		}, (err) => {
 			console.log(JSON.stringify(err))
 		});

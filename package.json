@@ -38,7 +38,17 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "phonegap-plugin-barcodescanner"
+    {
+      "id": "phonegap-plugin-barcodescanner",
+      "locator": "phonegap-plugin-barcodescanner",
+      "variables": {
+        "CAMERA_USAGE_DESCRIPTION": "This app is using the camera to scan barcodes and search the internet for product information."
+      }
+    },
+    "cordova-plugin-compat",
+    "cordova-plugin-file",
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "ios",
@@ -46,6 +56,11 @@
       "platform": "ios",
       "version": "",
       "locator": "ios"
+    },
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
     }
   ],
   "description": "vegokoll-ionic: An Ionic project"

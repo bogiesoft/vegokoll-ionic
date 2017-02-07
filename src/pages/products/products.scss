@@ -24,6 +24,51 @@ page-products {
 		}
 	}
 
+	ion-slides {
+		background-color: #eefefe;
+		height: auto;
+
+		ion-slides {
+			width: 80%;
+		}
+
+		ion-card {
+			ion-card-content {
+				padding: 0px !important;
+
+				ion-item {
+					padding: 0px !important;
+
+					ion-avatar {
+						margin: 0 16px 0 0 !important;
+
+						img {
+							width: 100px !important;
+							height: 100px !important;
+
+							border-radius: 0 !important;
+						}
+					}
+				
+					h2 {
+						color: #222;
+						font-family: 'ITCBaileySansCom-Bold';
+						font-weight: 400 !important;
+						font-size: 1.2em !important;
+
+						small {
+							color: #00D27B;
+						}
+					}
+
+					.brand {
+						margin: .5em 0 .25em;
+					}
+				}
+			}
+		}
+	}
+
 	ion-select {
 		display: inline-flex;
 	}

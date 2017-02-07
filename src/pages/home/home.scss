@@ -1,16 +1,20 @@
-page-home {
+page-home, {
 	background-color: #333333;
 	background-image: url('../assets/images/background-veganscan.jpg');
 	background-size: auto 100%;
 	background-position: 40%;
 
-	ion-content.content-ios {
+	ion-content.content-ios, ion-content.content-md {
 		background: transparent;
 		color: #ffffff;
 	}
 
 	ion-header {
 		background: transparent;
+		
+		&::after {
+			content: none !important;
+		}
 
 		ion-toolbar {
 			.toolbar-background {
@@ -69,6 +73,10 @@ page-home {
 	ion-footer {
 		padding: 0 20px 10px;
 		background: transparent;
+		
+		&::before {
+			content: none !important;
+		}
 
 		ion-toolbar {
 			.toolbar-background {

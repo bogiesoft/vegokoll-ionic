@@ -25,3 +25,17 @@
 .toolbar-background {
 	border: none !important;
 }
+
+button {
+	text-transform: none !important;
+}
+
+.back-button-md {
+	margin-left: 0px !important;
+  	padding-left: 0px !important;
+
+  	.back-button-icon-md {
+		margin-left: 0px !important;
+  		padding-left: 0px !important;
+  	}
+}

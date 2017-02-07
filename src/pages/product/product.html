@@ -41,7 +41,7 @@
 			<h2>Kommentar</h2>
 			<p>{{product.general_comment}}</p>
 		</ion-item>
-		<ion-item *ngIf="product.ingredients">
+		<ion-item *ngIf="product.ingredients.contains_eggs || product.ingredients.contains_animal_milk || product.ingredients.contains_animal_ingredients || product.other.contains_traces_of_eggs || product.other.contains_traces_of_milk || product.ingredients.additives_may_come_from_animal_origin">
 			<h2>Innehållsinformation</h2>
 			<p *ngIf="product.ingredients.contains_eggs">Innehåller ägg.</p>
 			<p *ngIf="product.ingredients.contains_animal_milk">Innehåller mjölkprodukter.</p>
@@ -51,38 +51,41 @@
 			<p *ngIf="product.ingredients.additives_may_come_from_animal_origin">Produkten innehåller ingredienser som i sällsynta fall har animaliskt ursprung.</p>
 		</ion-item>
 
-		<ion-grid class="images" *ngIf="product.images && product.images.length>0">
-			<ion-row *ngIf="product.images.length==1">
+		<ion-grid class="images" *ngIf="images && images.length>0">
+			<ion-row *ngIf="images.length==1">
 				<ion-col width-50>
-					<img src="{{product.images[0].url}}" (click)="openImagesModal()" />
+					<img src="{{images[0].eager[0].url}}" (click)="openImagesModal()" />
 				</ion-col>
 				<ion-col class="one" width-50>
 					<div class="upload">
 						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-icon (click)="chooseImage()" name="camera"></ion-icon>
+						<ion-spinner *ngIf="uploading"></ion-spinner>
+						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
 					</div>
 				</ion-col>
 			</ion-row>
 
-			<ion-row *ngIf="product.images.length>1">
+			<ion-row *ngIf="images.length>1">
 				<ion-col width-67>
-					<img src="{{product.images[0].url}}" (click)="openImagesModal()" />
+					<img src="{{images[0].eager[0].url}}" (click)="openImagesModal()" />
 				</ion-col>
 				<ion-col class="two" width-33>
-					<img src="{{product.images[1].url}}" (click)="openImagesModal()" />
+					<img src="{{images[1].eager[0].url}}" (click)="openImagesModal()" />
 					<div class="upload">
 						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-icon (click)="chooseImage()" name="camera"></ion-icon>
+						<ion-spinner *ngIf="uploading"></ion-spinner>
+						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
 					</div>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
-		<ion-grid class="images" *ngIf="!product.images || product.images.length<1">
+		<ion-grid class="images" *ngIf="!images || images.length<1">
 			<ion-row>
 				<ion-col class="zero" width-33>
 					<div class="upload">
 						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-icon (click)="chooseImage()" name="camera"></ion-icon>
+						<ion-spinner *ngIf="uploading"></ion-spinner>
+						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
 					</div>
 				</ion-col>
 			</ion-row>

@@ -14,6 +14,37 @@
 </ion-header>
 
 <ion-content id="products-content">
+	<ion-slides *ngIf="query">
+		<ion-slide>
+			<ion-card *ngIf="query" (click)="showProduct('6409100079277')">
+				<ion-card-content>
+				  <ion-item>
+				  	<ion-avatar item-left>
+						<img src="http://res.cloudinary.com/klandestino-ab/image/upload/v1486109944/dmsmevg5fehbmqisf3no.jpg">
+					</ion-avatar>
+					<h2>Texmex vegetarian <small>Ny!</small></h2>
+					<p>Ready to eat</p>
+					<p class="brand">Flodins</p>
+				</ion-item>
+				</ion-card-content>
+			</ion-card>
+		</ion-slide>
+		<ion-slide>
+			<ion-card *ngIf="query">
+				<ion-card-content>
+				  <ion-item>
+				  	<ion-avatar item-left>
+						<img src="http://res.cloudinary.com/klandestino-ab/image/upload/v1486109944/dmsmevg5fehbmqisf3no.jpg">
+					</ion-avatar>
+					<h2>Texmex vegetarian</h2>
+					<p>Ready to eat</p>
+					<p class="brand">Flodins</p>
+				</ion-item>
+				</ion-card-content>
+			</ion-card>
+		</ion-slide>
+	</ion-slides>
+
 	<ion-list *ngIf="categories && categories.length > 0">
 
 		<ion-item *ngFor="let product of products" padding>

@@ -55,7 +55,8 @@ export class ProductsPage {
 			this.query = {
 				"$or" : [
 					{ "title" : "~(" + searchterm + ")"},
-					{ "subtitle" : "~(" + searchterm + ")"}
+					{ "subtitle" : "~(" + searchterm + ")"},
+					{ "brand" : "~(" + searchterm + ")"}
 				]
 			};
 			this.loadProducts(null);
