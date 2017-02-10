@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ActionSheetController } from 'ionic-angular';
-import { Camera, Transfer } from 'ionic-native';
 import { Http } from '@angular/http';
 import { FormModal } from './modal-form';
 import { ImagesModal } from './modal-images';
@@ -23,15 +22,9 @@ export class ProductPage {
 	public empty:any = false;
 	public category:any;
 	public loader:any;
-
-	public imageChosen: any = 0;
-	public imagePath: any;
-	public imageNewPath: any;
-
-	public uploading: boolean;
+	public flags:any = [];
 
 	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
-		this.uploading = false;
 		this.gtin = params.get('ean');
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar..."
@@ -41,20 +34,10 @@ export class ProductPage {
 		this.loadProduct(this.gtin);
 	}
 
-	loadImages(gtin): void {
-		this.productService.getImages(gtin)
-		.then(data => {
-			this.images = data;
-		});
-	}
-
 	loadCategory(category): void {
 		let  query = { "code": category }
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/?query=' + JSON.stringify(query) + '&limit=1' )
-		.map(res => res.json())
-		.subscribe(data => {
-			// we've got back the raw data, now generate the core schedule data
-			// and save the data for later reference
+		this.productService.loadCategory(query, 1)
+		.then(data => {
 			this.category = data[0];
 		});
 	}
@@ -62,20 +45,24 @@ export class ProductPage {
 	loadProduct(ean): void {
 		let query = {"gtin": ean};
 
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + JSON.stringify(query) + '&limit=1' )
-		.map(res => res.json())
-		.subscribe(data => {
-			// we've got back the raw data, now generate the core schedule data
-			// and save the data for later reference
+		this.productService.load(query, 'title', 1)
+		.then(data => {
 			this.product = data[0];
 			if ( this.product!=null ) {
 				this.loadCategory( this.product.category );
-				this.loadImages( this.product.gtin );
+				this.loadFlags( this.product.gtin );
 				this.empty = false;
 			} else {
 				this.empty = true;
 			}
 			this.loader.dismissAll();
+		});
+	}
+
+	loadFlags(ean): void {
+		this.productService.loadFlags(ean)
+		.then(data => {
+			this.flags = data;
 		});
 	}
 
@@ -128,8 +115,13 @@ export class ProductPage {
 				{
 					text: 'Skicka',
 					handler: data => {
-						this.product.flagged = { "flagged": true, "message": data };
-						this.productService.flag( this.product._id, {"flagged": { "flagged": true, "message": data.message }} );
+						let flag = {
+							gtin : this.product.gtin,
+							message : data.message,
+							created_at : new Date()
+						};
+						this.productService.addFlag( flag );
+						this.flags.push( flag );
 					}
 				}
 			]
@@ -149,96 +141,5 @@ export class ProductPage {
 		    this.loadProduct(this.gtin);
 		});
 		modal.present();
-	}
-
-	isFlagged(): boolean {
-		if ( typeof this.product.flagged != 'undefined' ) {
-			if ( this.product.flagged === true ) {
-				return true;
-			} else if ( this.product.flagged.flagged === true ) {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
-
-	chooseImage(): void {
-		let actionSheet = this.actionSheet.create({
-			title: 'Välj bildkälla',
-				buttons: [
-				{
-					text: 'Album',
-					icon: 'albums',
-					handler: () => {
-						this.actionHandler(1);
-					}
-				},
-				{
-					text: 'Kamera',
-					icon: 'camera',
-					handler: () => {
-						this.actionHandler(2);
-					}
-				},
-				{
-					text: 'Avbryt',
-					role: 'cancel',
-					handler: () => {
-						console.log('Cancel clicked');
-					}
-				}
-			]
-		});
-		actionSheet.present();
-	}
-
-	actionHandler(selection: any) {
-		var options: any;
-		if (selection == 1) {
-			options = {
-				quality: 75,
-				destinationType: Camera.DestinationType.FILE_URI,
-				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-				allowEdit: false,
-				encodingType: Camera.EncodingType.JPEG,
-				saveToPhotoAlbum: false
-			};
-		} else {
-			options = {
-				quality: 75,
-				destinationType: Camera.DestinationType.FILE_URI,
-				sourceType: Camera.PictureSourceType.CAMERA,
-				allowEdit: false,
-				encodingType: Camera.EncodingType.JPEG,
-				saveToPhotoAlbum: false
-			};
-		}
-
-		Camera.getPicture(options).then((imgUrl) => {
-
-	    var uploadOptions = {
-	       params: { 'upload_preset': 'uymbkjen' }
-	    };
-
-	    const fileTransfer = new Transfer();
-	    	this.uploading = true;
-			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload',
-      			uploadOptions).then((data) => {
-		      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
-		      	let response = JSON.parse(JSON.stringify(data));
-		      	let image = JSON.parse(response.response);
-		      	image.gtin = this.gtin;
-
-				this.loadImages( this.gtin );
-		        this.productService.addImage( image );
-
-	    		this.uploading = false;
-		      }, (err) => {
-		        console.log(JSON.stringify(err));
-		      });
-		}, (err) => {
-			console.log(JSON.stringify(err))
-		});
 	}
 }

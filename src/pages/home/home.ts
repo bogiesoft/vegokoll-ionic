@@ -26,11 +26,10 @@ export class HomePage {
         let ean = barcodeData.text;
         this.navCtrl.push(ProductPage, {ean: ean});
       } else {
-        alert('Oj, något gick fel!');
+        alert('Oj, det gick inte att starta kameran.');
       }
     }, (err) => {
-      alert('Oj, något gick fel!');
-      this.navCtrl.push(ProductPage, {ean: 666});
+      alert('Oj, det gick inte att starta kameran.');
     });
   }
 

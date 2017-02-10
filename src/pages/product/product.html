@@ -11,11 +11,10 @@
 	<ion-list *ngIf="product">
 
 		<ion-item class="warning" *ngIf="!product.approved" text-center>
-	  	<h2>Väntar på godkännande!</h2>
+	  		<h2>Väntar på godkännande!</h2>
 	 	</ion-item>
-	 	
-		<ion-item class="flagged" *ngIf="isFlagged()" text-center>
-	  	<h2>Anmäld som felaktig!</h2>
+		<ion-item class="flagged" *ngIf="flags && flags.length>=1" text-center>
+	  		<h2>Anmäld som felaktig!</h2>
 	 	</ion-item>
 	 	
 		<ion-item text-center>
@@ -50,47 +49,6 @@
 			<p *ngIf="product.other.contains_traces_of_milk">Kan innehålla spår av mjölk.</p>
 			<p *ngIf="product.ingredients.additives_may_come_from_animal_origin">Produkten innehåller ingredienser som i sällsynta fall har animaliskt ursprung.</p>
 		</ion-item>
-
-		<ion-grid class="images" *ngIf="images && images.length>0">
-			<ion-row *ngIf="images.length==1">
-				<ion-col width-50>
-					<img src="{{images[0].eager[0].url}}" (click)="openImagesModal()" />
-				</ion-col>
-				<ion-col class="one" width-50>
-					<div class="upload">
-						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-spinner *ngIf="uploading"></ion-spinner>
-						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
-					</div>
-				</ion-col>
-			</ion-row>
-
-			<ion-row *ngIf="images.length>1">
-				<ion-col width-67>
-					<img src="{{images[0].eager[0].url}}" (click)="openImagesModal()" />
-				</ion-col>
-				<ion-col class="two" width-33>
-					<img src="{{images[1].eager[0].url}}" (click)="openImagesModal()" />
-					<div class="upload">
-						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-spinner *ngIf="uploading"></ion-spinner>
-						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
-					</div>
-				</ion-col>
-			</ion-row>
-		</ion-grid>
-		<ion-grid class="images" *ngIf="!images || images.length<1">
-			<ion-row>
-				<ion-col class="zero" width-33>
-					<div class="upload">
-						<img class="pixel" src="assets/images/pixel.gif" />
-						<ion-spinner *ngIf="uploading"></ion-spinner>
-						<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
-					</div>
-				</ion-col>
-			</ion-row>
-		</ion-grid>
-
 		<ion-item>
 			<ion-grid>
 				<ion-row>
@@ -100,7 +58,7 @@
 				</ion-row>
 			</ion-grid>
 		</ion-item>
-		<ion-item padding *ngIf="!product.flagged || product.flagged.flagged == false">
+		<ion-item padding *ngIf="flags.length==0">
 			<button ion-button color="danger" outline block (click)="flagProduct()">Anmäl felaktighet</button>
 		</ion-item>
 	</ion-list>
