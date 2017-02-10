@@ -26,6 +26,10 @@ page-home, {
 				font-size: 1.7em;
 			}
 		}
+
+		&.header-md::after {
+			content: none;
+		}
 	}
 
 	ion-slides {
@@ -76,6 +80,10 @@ page-home, {
 		
 		&::before {
 			content: none !important;
+		}
+
+		&.footer-md::before {
+			content: none;
 		}
 
 		ion-toolbar {

@@ -29,8 +29,8 @@ export class HomePage {
         alert('Oj, något gick fel!');
       }
     }, (err) => {
-        alert('Oj, något gick fel!');
-        this.navCtrl.push(ProductPage, {ean: 666});
+      alert('Oj, något gick fel!');
+      this.navCtrl.push(ProductPage, {ean: 666});
     });
   }
 

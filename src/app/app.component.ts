@@ -16,6 +16,9 @@ export class Vegokoll {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleLightContent();
+      if (platform.is('android')) {
+		    StatusBar.backgroundColorByHexString("#00b4d2");
+	    }
     });
   }
 }
