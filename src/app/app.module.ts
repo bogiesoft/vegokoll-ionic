@@ -9,18 +9,6 @@ import { FormModal } from '../pages/product/modal-form';
 import { ImagesModal } from '../pages/product/modal-images';
 import { ProductService } from '../providers/product-service';
 
-// Import the AF2 Module
-import { AngularFireModule } from 'angularfire2';
- 
-// AF2 Settings
-export const firebaseConfig = {
-  apiKey: "AIzaSyBxRjBG5idSlY2oUAEw0G0R7MRYWNrNnFE",
-  authDomain: "vegokoll-c12bb.firebaseapp.com",
-  databaseURL: "https://vegokoll-c12bb.firebaseio.com",
-  storageBucket: "vegokoll-c12bb.appspot.com",
-  messagingSenderId: "516714888958"
-};
-
 @NgModule({
   declarations: [
     Vegokoll,
@@ -34,8 +22,7 @@ export const firebaseConfig = {
   imports: [
     IonicModule.forRoot(Vegokoll, {
       backButtonText: ''
-    }),
-    AngularFireModule.initializeApp(firebaseConfig)
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
