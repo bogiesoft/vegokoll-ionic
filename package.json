@@ -36,14 +36,7 @@
     "cordova-plugin-whitelist",
     "cordova-plugin-console",
     "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard",
-    {
-      "id": "phonegap-plugin-barcodescanner",
-      "locator": "phonegap-plugin-barcodescanner",
-      "variables": {
-        "CAMERA_USAGE_DESCRIPTION": "This app is using the camera to scan barcodes and search the internet for product information."
-      }
-    }
+    "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
     "ios",
