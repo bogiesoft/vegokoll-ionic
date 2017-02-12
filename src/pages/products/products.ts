@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { AlertController, Content, LoadingController, NavController } from 'ionic-angular';
+import { Keyboard } from 'ionic-native';
 import { Http } from '@angular/http';
 import { ProductPage } from '../product/product';
 import { ProductService } from '../../providers/product-service';
@@ -14,6 +15,7 @@ export class ProductsPage {
 	@ViewChild(Content) content: Content;
 
 	public products:any = [];
+	public productcount:any = {};
 	public categories:any = [];
 	public count:any = 0;
 
@@ -45,11 +47,13 @@ export class ProductsPage {
 		});
 	}
 
-	searchProducts(event:any) {
+	searchProducts(event:any):void {
 		let searchterm = event.target.value;
 
 		this.content.scrollToTop();
 		this.limit = 20;
+
+		this.hideKeyboard();
 
 		if (searchterm && searchterm.trim() != '') {
 			this.query = {
@@ -64,6 +68,10 @@ export class ProductsPage {
 			this.query = {};
 			this.loadProducts(null);
 		}
+	}
+
+	hideKeyboard():void {
+		Keyboard.close()
 	}
 
 	loadProducts(infiniteScroll): void {
@@ -90,6 +98,12 @@ export class ProductsPage {
 		this.productService.count(q, this.sort, this.limit)
 		.then(data => {
 			this.count = data;
+		});
+
+		this.productService.count(q, this.sort, 0)
+		.then(data => {
+			this.productcount = data;
+			console.log(this.productcount);
 		});
 	}
 

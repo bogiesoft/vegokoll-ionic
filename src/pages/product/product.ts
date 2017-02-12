@@ -137,8 +137,8 @@ export class ProductPage {
 		prompt.present();
 	}
 
-	openImagesModal(): void {
-		let modal = this.modalCtrl.create(ImagesModal, {"images": this.product.images});
+	openImagesModal(index): void {
+		let modal = this.modalCtrl.create(ImagesModal, {"images": this.images, "initial": index});
 		modal.present();
 	}
 
@@ -230,8 +230,10 @@ export class ProductPage {
 		      	let image = JSON.parse(response.response);
 		      	image.gtin = this.gtin;
 
-				this.loadImages( this.gtin );
-		        this.productService.addImage( image );
+		        this.productService.addImage( image )
+				.then(data => {
+					this.loadImages( this.gtin );
+				});
 
 	    		this.uploading = false;
 		      }, (err) => {

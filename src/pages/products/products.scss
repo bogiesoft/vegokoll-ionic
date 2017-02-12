@@ -1,5 +1,11 @@
 page-products {
 
+	ion-content {
+		&.content-ios, &.content-md {
+			background-color: #eefefe;
+		}
+	}
+
 	ion-header {
 
 		ion-title {
@@ -24,46 +30,74 @@ page-products {
 		}
 	}
 
-	ion-slides {
-		background-color: #eefefe;
-		height: auto;
+	ion-grid#intro {
+		padding: 3em 0 2em;
 
-		ion-slides {
-			width: 80%;
+		ion-row {
+			ion-col {
+				text-align: center;
+
+				span {
+					display: block;
+					color: #00b4d2;
+					font-family: 'ITCBaileySansCom-Bold';
+					font-weight: 400 !important;
+					font-size: 1.2em !important;
+				}
+				h2 {
+					margin: 0;
+
+					font-family: 'ITCBaileySansCom-Bold';
+					font-weight: 400 !important;
+					font-size: 6.2em !important;
+					color: #00b4d2;
+  					line-height: 75%;
+				}
+			}
 		}
+	}
 
-		ion-card {
-			ion-card-content {
+
+	ion-card {
+		ion-card-content {
+			padding: 0px !important;
+
+			ion-item {
 				padding: 0px !important;
 
-				ion-item {
-					padding: 0px !important;
+				ion-avatar {
+					margin: 0 16px 0 0 !important;
 
-					ion-avatar {
-						margin: 0 16px 0 0 !important;
+					img {
+						width: 100px !important;
+						height: 100px !important;
 
-						img {
-							width: 100px !important;
-							height: 100px !important;
-
-							border-radius: 0 !important;
-						}
+						border-radius: 0 !important;
 					}
-				
-					h2 {
-						color: #222;
-						font-family: 'ITCBaileySansCom-Bold';
-						font-weight: 400 !important;
-						font-size: 1.2em !important;
+				}
+			
+				span {
+					display: inline-block;
+					font-family: 'ITCBaileySansCom-Bold';
+					font-weight: 400 !important;
+					font-size: 15.3px;
+  					line-height: 75%;
+					color: #00D27B;
+				}
 
-						small {
-							color: #00D27B;
-						}
-					}
+				h2 {
+					color: #222;
+					font-family: 'ITCBaileySansCom-Bold';
+					font-weight: 400 !important;
+					font-size: 1.2em !important;
+				}
 
-					.brand {
-						margin: .5em 0 .25em;
-					}
+				.brand {
+					margin: .5em 0 .25em;
+				}
+
+				.item-inner {
+					margin-bottom: -2px;
 				}
 			}
 		}
@@ -74,6 +108,7 @@ page-products {
 	}
 
 	ion-list {
+		background-color: #ffffff;
 		margin-bottom: 0 !important;
 
 		ion-list-header {
