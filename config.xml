@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="se.djurensratt.vegokoll" version="1.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="105010" id="hundraprocentveganskt" version="1.5.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Vegokoll</name>
     <description>Appen Vegokoll är Djurens Rätts nya app där du enkelt scannar en varas streckkod för att ta reda på om den är vegansk eller inte.</description>
     <author email="peter@djurensratt.se" href="http://www.djurensratt.se/">Djurens Rätt</author>
@@ -70,12 +70,10 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
-    <preference name="SplashScreenDelay" value="0" />
+    <preference name="SplashScreen" value="screen" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="500" />
-    <preference name="SplashScreenBackgroundColor" value="#00b4d2" />
     <preference name="ShowSplashScreenSpinner" value="false" />
-    <preference name="SplashScreen" value="screen" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>

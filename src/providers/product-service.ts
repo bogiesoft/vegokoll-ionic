@@ -4,6 +4,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ProductService {
+	public API: String = 'https://vegokoll-rest.herokuapp.com/api/v1';
+
 	constructor(public http: Http) {}
 
 	load(query, sort, limit) {
@@ -11,7 +13,7 @@ export class ProductService {
 		let querystring = JSON.stringify(query);
 
 		return new Promise(resolve => {
-			this.http.get('https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + querystring + '&limit=' + limit + '&sort=' + sort)
+			this.http.get(this.API + '/product/?query=' + querystring + '&limit=' + limit + '&sort=' + sort)
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);
@@ -23,7 +25,7 @@ export class ProductService {
 		let querystring = JSON.stringify(query);
 
 		return new Promise(resolve => {
-			this.http.get('https://vegokoll-rest.herokuapp.com/api/v1/product/count/?query=' + querystring + '&limit=' + limit + '&sort=' + sort )
+			this.http.get(this.API + '/product/count/?query=' + querystring + '&limit=' + limit + '&sort=' + sort )
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);
@@ -34,7 +36,7 @@ export class ProductService {
 	addImage(image) {
     	let headers = new Headers({'Content-Type': 'application/json'});
 		return new Promise(resolve => {
-			this.http.post('https://vegokoll-rest.herokuapp.com/api/v1/productimage/', image, {headers: headers})
+			this.http.post(this.API + '/productimage/', image, {headers: headers})
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);
@@ -47,7 +49,7 @@ export class ProductService {
 			'gtin': gtin
 		});
 		return new Promise(resolve => {
-			this.http.get('https://vegokoll-rest.herokuapp.com/api/v1/productimage/?query=' + querystring)
+			this.http.get(this.API + '/productimage/?query=' + querystring)
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);
@@ -55,10 +57,10 @@ export class ProductService {
 		});
 	}
 
-	add(product) {
+	addProduct(product) {
     	let headers = new Headers({'Content-Type': 'application/json'});
 		return new Promise(resolve => {
-			this.http.post('https://vegokoll-rest.herokuapp.com/api/v1/product/', product, {headers: headers})
+			this.http.post(this.API + '/product/', product, {headers: headers})
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);
@@ -66,9 +68,34 @@ export class ProductService {
 		});
 	}
 
-	flag(_id, body) {
+	loadCategory(query, limit) {
+		let querystring = JSON.stringify(query);
+
 		return new Promise(resolve => {
-			this.http.put('https://vegokoll-rest.herokuapp.com/api/v1/product/'+_id, body)
+			this.http.get(this.API + '/category/?query=' + querystring + '&limit=' + limit)
+				.map(res => res.json())
+				.subscribe(data => {
+					resolve(data);
+				});
+		});
+	}
+
+	loadFlags(gtin) {
+		let querystring = JSON.stringify({
+			'gtin': gtin
+		});
+		return new Promise(resolve => {
+			this.http.get(this.API + '/productflag/?query=' + querystring)
+				.map(res => res.json())
+				.subscribe(data => {
+					resolve(data);
+				});
+		});
+	}
+
+	addFlag(flag) {
+		return new Promise(resolve => {
+			this.http.post(this.API + '/productflag/', flag)
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);

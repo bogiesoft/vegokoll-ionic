@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ActionSheetController } from 'ionic-angular';
-import { Camera, Transfer } from 'ionic-native';
 import { Http } from '@angular/http';
 import { FormModal } from './modal-form';
 import { ImagesModal } from './modal-images';
@@ -23,15 +22,9 @@ export class ProductPage {
 	public empty:any = false;
 	public category:any;
 	public loader:any;
-
-	public imageChosen: any = 0;
-	public imagePath: any;
-	public imageNewPath: any;
-
-	public uploading: boolean;
+	public flags:any = [];
 
 	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
-		this.uploading = false;
 		this.gtin = params.get('ean');
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar..."
@@ -41,20 +34,10 @@ export class ProductPage {
 		this.loadProduct(this.gtin);
 	}
 
-	loadImages(gtin): void {
-		this.productService.getImages(gtin)
-		.then(data => {
-			this.images = data;
-		});
-	}
-
 	loadCategory(category): void {
 		let  query = { "code": category }
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/?query=' + JSON.stringify(query) + '&limit=1' )
-		.map(res => res.json())
-		.subscribe(data => {
-			// we've got back the raw data, now generate the core schedule data
-			// and save the data for later reference
+		this.productService.loadCategory(query, 1)
+		.then(data => {
 			this.category = data[0];
 		});
 	}
@@ -62,20 +45,24 @@ export class ProductPage {
 	loadProduct(ean): void {
 		let query = {"gtin": ean};
 
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/product/?query=' + JSON.stringify(query) + '&limit=1' )
-		.map(res => res.json())
-		.subscribe(data => {
-			// we've got back the raw data, now generate the core schedule data
-			// and save the data for later reference
+		this.productService.load(query, 'title', 1)
+		.then(data => {
 			this.product = data[0];
 			if ( this.product!=null ) {
 				this.loadCategory( this.product.category );
-				this.loadImages( this.product.gtin );
+				this.loadFlags( this.product.gtin );
 				this.empty = false;
 			} else {
 				this.empty = true;
 			}
 			this.loader.dismissAll();
+		});
+	}
+
+	loadFlags(ean): void {
+		this.productService.loadFlags(ean)
+		.then(data => {
+			this.flags = data;
 		});
 	}
 
@@ -128,8 +115,13 @@ export class ProductPage {
 				{
 					text: 'Skicka',
 					handler: data => {
-						this.product.flagged = { "flagged": true, "message": data };
-						this.productService.flag( this.product._id, {"flagged": { "flagged": true, "message": data.message }} );
+						let flag = {
+							gtin : this.product.gtin,
+							message : data.message,
+							created_at : new Date()
+						};
+						this.productService.addFlag( flag );
+						this.flags.push( flag );
 					}
 				}
 			]
@@ -150,7 +142,7 @@ export class ProductPage {
 		});
 		modal.present();
 	}
-
+  
 	isFlagged(): boolean {
 		if ( typeof this.product.flagged != 'undefined' ) {
 			if ( this.product.flagged === true ) {

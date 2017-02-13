@@ -40,9 +40,9 @@ export class ProductsPage {
 	}
 
 	loadCategories(): void {
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/' )
-		.map(res => res.json())
-		.subscribe(data => {
+		let  query = { };
+		this.productService.loadCategory(query, 0)
+		.then(data => {
 			this.categories = data;
 		});
 	}

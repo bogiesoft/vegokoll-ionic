@@ -44,11 +44,12 @@ export class FormModal {
   }
 
 	loadCategories(): void {
-		this.http.get( 'https://vegokoll-rest.herokuapp.com/api/v1/category/' )
-		.map(res => res.json())
-		.subscribe(data => {
-			this.categories = data;
-		});
+    let  query = {};
+    this.productService.loadCategory(query, '0')
+    .then(data => {
+      this.categories = data;
+    });
+
 	}
 
   dismiss(): void {
@@ -61,7 +62,8 @@ export class FormModal {
   		this.product.title == "" ||
   		this.product.brand == null ||
   		this.product.brand == "" ||
-  		this.product.category == null
+      this.product.category == null ||
+      this.product.category == ""
   	) {
 			let prompt = this.alertCtrl.create({
 				title: 'För lite information!',
@@ -78,7 +80,7 @@ export class FormModal {
   	} else {
       this.product.created_on = new Date();
       this.product.updated_on = new Date();
-  		this.productService.add(this.product);
+  		this.productService.addProduct(this.product);
     	this.viewCtrl.dismiss();
   	}
   }
