@@ -9,11 +9,22 @@
 	</ion-navbar>
 
 	<ion-toolbar color="primary" border-top-no border-bottom-no>
-		<ion-searchbar placeholder="Sök efter en produkt" (ionInput)="searchProducts($event)" (ionClear)="searchProducts($event)"></ion-searchbar>
+		<form>
+			<ion-searchbar type="search" placeholder="Sök efter en produkt" (search)="searchProducts($event)" (ionClear)="searchProducts($event)"></ion-searchbar>
+		</form>
 	</ion-toolbar>
 </ion-header>
 
-<ion-content id="products-content">
+<ion-content id="products-content" (ionScroll)="hideKeyboard()">
+	<ion-grid id="intro">
+		<ion-row>
+			<ion-col width-100>
+				<h2>{{productcount.count}}</h2>
+				<span>veganska produkter</span>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+  
 	<ion-list *ngIf="categories && categories.length > 0">
 
 		<ion-item *ngFor="let product of products" padding>

@@ -89,6 +89,20 @@ page-product {
 				height: 48px !important;
   				font-size: 1em !important;
 			}
+
+			ion-slides {
+				ion-slide {
+					&#upload {
+						height: calc(33vw - 14px);
+						border: 1px dashed #ddd;
+						color: #ddd;
+
+						ion-icon {
+							font-size: 2.2em;
+						}
+					}
+				}
+			}
 		}
 	}
 

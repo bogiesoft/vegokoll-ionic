@@ -50,6 +50,17 @@
 			<p *ngIf="product.ingredients.additives_may_come_from_animal_origin">Produkten innehåller ingredienser som i sällsynta fall har animaliskt ursprung.</p>
 		</ion-item>
 		<ion-item>
+			<ion-slides slidesPerView="3" spaceBetween="8">
+				<ion-slide *ngFor="let image of images; let i = index">
+					<img src="{{image.eager[0].url}}" (click)="openImagesModal(i)" />
+				</ion-slide>
+				<ion-slide id="upload">
+					<ion-icon *ngIf="!uploading" (click)="chooseImage()" name="camera"></ion-icon>
+					<ion-spinner *ngIf="uploading" ></ion-spinner>
+				</ion-slide>
+			</ion-slides>
+		</ion-item>
+		<ion-item>
 			<ion-grid>
 				<ion-row>
 					<ion-col width-33><img src="assets/images/icon-glutenfree.png" [class.active]="product.ingredients.gluten_free" /></ion-col>

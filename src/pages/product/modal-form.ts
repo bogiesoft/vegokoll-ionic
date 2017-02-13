@@ -33,10 +33,8 @@ export class FormModal {
     "manufacturer_confirms_vegan": false,
     "hundred_procent_vegan": false,
     "general_comment":"","approved": false,
-    "flagged": {
-      "flagged": false,
-      "message": ""
-    }
+    "created_on": new Date(),
+    "updated_on": new Date()
   };
 	public categories:any = [];
 
@@ -80,6 +78,8 @@ export class FormModal {
 			});
 			prompt.present();
   	} else {
+      this.product.created_on = new Date();
+      this.product.updated_on = new Date();
   		this.productService.addProduct(this.product);
     	this.viewCtrl.dismiss();
   	}

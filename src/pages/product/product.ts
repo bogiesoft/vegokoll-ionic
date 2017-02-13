@@ -129,8 +129,8 @@ export class ProductPage {
 		prompt.present();
 	}
 
-	openImagesModal(): void {
-		let modal = this.modalCtrl.create(ImagesModal, {"images": this.product.images});
+	openImagesModal(index): void {
+		let modal = this.modalCtrl.create(ImagesModal, {"images": this.images, "initial": index});
 		modal.present();
 	}
 
@@ -141,5 +141,102 @@ export class ProductPage {
 		    this.loadProduct(this.gtin);
 		});
 		modal.present();
+	}
+  
+	isFlagged(): boolean {
+		if ( typeof this.product.flagged != 'undefined' ) {
+			if ( this.product.flagged === true ) {
+				return true;
+			} else if ( this.product.flagged.flagged === true ) {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	chooseImage(): void {
+		let actionSheet = this.actionSheet.create({
+			title: 'Välj bildkälla',
+				buttons: [
+				{
+					text: 'Album',
+					icon: 'albums',
+					handler: () => {
+						this.actionHandler(1);
+					}
+				},
+				{
+					text: 'Kamera',
+					icon: 'camera',
+					handler: () => {
+						this.actionHandler(2);
+					}
+				},
+				{
+					text: 'Avbryt',
+					role: 'cancel',
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				}
+			]
+		});
+		actionSheet.present();
+	}
+
+	actionHandler(selection: any) {
+		var options: any;
+		if (selection == 1) {
+			options = {
+				quality: 75,
+				destinationType: Camera.DestinationType.FILE_URI,
+				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+				allowEdit: false,
+				targetWidth: 1080,
+				targetHeight: 1080,
+				encodingType: Camera.EncodingType.JPEG,
+				saveToPhotoAlbum: false
+			};
+		} else {
+			options = {
+				quality: 75,
+				destinationType: Camera.DestinationType.FILE_URI,
+				sourceType: Camera.PictureSourceType.CAMERA,
+				allowEdit: false,
+				targetWidth: 1080,
+				targetHeight: 1080,
+				encodingType: Camera.EncodingType.JPEG,
+				saveToPhotoAlbum: false
+			};
+		}
+
+		Camera.getPicture(options).then((imgUrl) => {
+
+	    var uploadOptions = {
+	       params: { 'upload_preset': 'uymbkjen' }
+	    };
+
+	    const fileTransfer = new Transfer();
+	    	this.uploading = true;
+			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload',
+      			uploadOptions).then((data) => {
+		      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
+		      	let response = JSON.parse(JSON.stringify(data));
+		      	let image = JSON.parse(response.response);
+		      	image.gtin = this.gtin;
+
+		        this.productService.addImage( image )
+				.then(data => {
+					this.loadImages( this.gtin );
+				});
+
+	    		this.uploading = false;
+		      }, (err) => {
+		        console.log(JSON.stringify(err));
+		      });
+		}, (err) => {
+			console.log(JSON.stringify(err))
+		});
 	}
 }
