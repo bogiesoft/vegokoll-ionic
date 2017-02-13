@@ -201,6 +201,8 @@ export class ProductPage {
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
 				allowEdit: false,
+				targetWidth: 1080,
+				targetHeight: 1080,
 				encodingType: Camera.EncodingType.JPEG,
 				saveToPhotoAlbum: false
 			};
@@ -210,6 +212,8 @@ export class ProductPage {
 				destinationType: Camera.DestinationType.FILE_URI,
 				sourceType: Camera.PictureSourceType.CAMERA,
 				allowEdit: false,
+				targetWidth: 1080,
+				targetHeight: 1080,
 				encodingType: Camera.EncodingType.JPEG,
 				saveToPhotoAlbum: false
 			};
