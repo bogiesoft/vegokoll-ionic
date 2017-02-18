@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Camera, Transfer } from 'ionic-native';
 import { Http } from '@angular/http';
 import { FormModal } from './modal-form';
 import { ImagesModal } from './modal-images';
@@ -22,6 +23,12 @@ export class ProductPage {
 	public empty:any = false;
 	public category:any;
 	public loader:any;
+
+	public imageChosen: any = 0;
+ 	public imagePath: any;
+	public imageNewPath: any;
+
+	public uploading: boolean;
 	public flags:any = [];
 
 	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
@@ -50,6 +57,7 @@ export class ProductPage {
 			this.product = data[0];
 			if ( this.product!=null ) {
 				this.loadCategory( this.product.category );
+				this.loadImages( this.product.gtin );
 				this.loadFlags( this.product.gtin );
 				this.empty = false;
 			} else {
@@ -63,6 +71,13 @@ export class ProductPage {
 		this.productService.loadFlags(ean)
 		.then(data => {
 			this.flags = data;
+		});
+	}
+
+	loadImages(gtin): void {
+		this.productService.getImages(gtin)
+		.then(data => {
+			this.images = data;
 		});
 	}
 
