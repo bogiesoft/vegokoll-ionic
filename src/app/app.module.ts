@@ -9,6 +9,11 @@ import { FormModal } from '../pages/product/modal-form';
 import { ImagesModal } from '../pages/product/modal-images';
 import { ProductService } from '../providers/product-service';
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { Camera } from '@ionic-native/camera';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { File } from '@ionic-native/file';
+
 @NgModule({
   declarations: [
     Vegokoll,
@@ -34,6 +39,13 @@ import { ProductService } from '../providers/product-service';
     ImagesModal,
     ProductsPage
   ],
-  providers: [ProductService]
+  providers: [
+    ProductService,
+    BarcodeScanner,
+    Camera,
+    Transfer,
+    TransferObject,
+    File
+  ]
 })
 export class AppModule {}

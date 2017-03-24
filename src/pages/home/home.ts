@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { BarcodeScanner } from 'ionic-native';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+
 import { AboutPage } from '../about/about';
 import { ProductPage } from '../product/product';
 import { ProductsPage } from '../products/products';
@@ -11,7 +12,7 @@ import { ProductsPage } from '../products/products';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner) {
 
   }
 
@@ -19,7 +20,7 @@ export class HomePage {
     //push another page onto the history stack
     //causing the nav controller to animate the new page in
     
-    BarcodeScanner.scan().then((barcodeData) => {
+    this.barcodeScanner.scan().then((barcodeData) => {
       if( barcodeData.cancelled == 1 ) {
         return;
       } else if( barcodeData.text !== "" ) {

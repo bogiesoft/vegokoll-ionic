@@ -27,14 +27,13 @@
   
 	<ion-list *ngIf="categories && categories.length > 0">
 
-		<ion-item *ngFor="let product of products" padding>
+		<button ion-item *ngFor="let product of products" padding (click)="showProduct(product.gtin)">
 			<h2>{{product.title}} <small>{{product.subtitle}}</small></h2>
 			<p class="brand">{{product.brand}}</p>
 			<ion-badge class="category" *ngIf="product.category">{{categoryNameByCode(product.category).name}}</ion-badge>
 			<ion-badge *ngIf="product.other.organic">Ekologisk</ion-badge>
 			<ion-badge *ngIf="product.ingredients.gluten_free">Glutenfritt</ion-badge>
-    		<button ion-button clear item-right (click)="showProduct(product.gtin)"><ion-icon name="ios-arrow-forward"></ion-icon></button>
-		</ion-item>
+		</button>
 
 	</ion-list>
 	<ion-infinite-scroll (ionInfinite)="showMore($event)" *ngIf="products.length<count.count">

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ActionSheetController } from 'ionic-angular';
-import { Camera, Transfer } from 'ionic-native';
+import { Camera } from '@ionic-native/camera';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { File } from '@ionic-native/file';
+
 import { Http } from '@angular/http';
 import { FormModal } from './modal-form';
 import { ImagesModal } from './modal-images';
@@ -31,7 +34,19 @@ export class ProductPage {
 	public uploading: boolean;
 	public flags:any = [];
 
-	constructor(public alertCtrl: AlertController, public actionSheet: ActionSheetController, public loadingCtrl: LoadingController, public navCtrl: NavController, public params: NavParams, public http: Http, public modalCtrl: ModalController, public productService: ProductService) {
+	constructor(
+		public alertCtrl: AlertController, 
+		public actionSheet: ActionSheetController, 
+		public loadingCtrl: LoadingController, 
+		public navCtrl: NavController, 
+		public params: NavParams, 
+		public http: Http, 
+		public modalCtrl: ModalController, 
+		public productService: ProductService,
+		private camera: Camera,
+		private transfer: Transfer, 
+		private file: File
+	) {
 		this.gtin = params.get('ean');
 		this.loader = this.loadingCtrl.create({
 			content: "Laddar..."
@@ -205,51 +220,49 @@ export class ProductPage {
 		if (selection == 1) {
 			options = {
 				quality: 75,
-				destinationType: Camera.DestinationType.FILE_URI,
-				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+				destinationType: this.camera.DestinationType.FILE_URI,
+				sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
 				allowEdit: false,
 				targetWidth: 1080,
 				targetHeight: 1080,
-				encodingType: Camera.EncodingType.JPEG,
+				encodingType: this.camera.EncodingType.JPEG,
 				saveToPhotoAlbum: false
 			};
 		} else {
 			options = {
 				quality: 75,
-				destinationType: Camera.DestinationType.FILE_URI,
-				sourceType: Camera.PictureSourceType.CAMERA,
+				destinationType: this.camera.DestinationType.FILE_URI,
+				sourceType: this.camera.PictureSourceType.CAMERA,
 				allowEdit: false,
 				targetWidth: 1080,
 				targetHeight: 1080,
-				encodingType: Camera.EncodingType.JPEG,
+				encodingType: this.camera.EncodingType.JPEG,
 				saveToPhotoAlbum: false
 			};
 		}
 
-		Camera.getPicture(options).then((imgUrl) => {
+		this.camera.getPicture(options).then((imgUrl) => {
+		    var uploadOptions = {
+		       params: { 'upload_preset': 'uymbkjen' }
+		    };
+		    const fileTransfer: TransferObject = this.transfer.create();
+		    this.uploading = true;
 
-	    var uploadOptions = {
-	       params: { 'upload_preset': 'uymbkjen' }
-	    };
+			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload', uploadOptions).then((data) => {
+			      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
+			      	let response = JSON.parse(JSON.stringify(data));
+			      	let image = JSON.parse(response.response);
+			      	image.gtin = this.gtin;
 
-	    const fileTransfer = new Transfer();
-	    	this.uploading = true;
-			fileTransfer.upload(imgUrl, 'https://api.cloudinary.com/v1_1/klandestino-ab/image/upload',
-      			uploadOptions).then((data) => {
-		      	// Fix until bugfix is released https://github.com/driftyco/ionic-native/commit/a5b4632ceb1a962157ec2be420dfcf5dcf9abe4f
-		      	let response = JSON.parse(JSON.stringify(data));
-		      	let image = JSON.parse(response.response);
-		      	image.gtin = this.gtin;
+			        this.productService.addImage( image )
+					.then(data => {
+						this.loadImages( this.gtin );
+					});
 
-		        this.productService.addImage( image )
-				.then(data => {
-					this.loadImages( this.gtin );
-				});
-
-	    		this.uploading = false;
-		      }, (err) => {
-		        console.log(JSON.stringify(err));
-		      });
+		    		this.uploading = false;
+			}, (err) => {
+			        console.log(JSON.stringify(err));
+			});
 		}, (err) => {
 			console.log(JSON.stringify(err))
 		});
