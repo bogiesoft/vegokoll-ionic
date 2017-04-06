@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { Vegokoll } from './app.component';
 import { AboutPage } from '../pages/about/about';
@@ -25,6 +27,8 @@ import { File } from '@ionic-native/file';
     ProductsPage
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(Vegokoll, {
       backButtonText: ''
     })
