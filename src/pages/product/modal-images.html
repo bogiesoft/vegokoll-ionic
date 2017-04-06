@@ -9,7 +9,7 @@
 </ion-header>
 <ion-content padding>
 	
-	<ion-slides *ngIf="images" #slides [initialSlide]="index">
+	<ion-slides *ngIf="images" #slides [initialSlide]="index" spaceBetween="20">
   		<ion-slide *ngFor="let image of images">
     		<img src="{{image.url}}"/>
   		</ion-slide>

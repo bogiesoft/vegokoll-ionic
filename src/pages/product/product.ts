@@ -48,10 +48,6 @@ export class ProductPage {
 		private file: File
 	) {
 		this.gtin = params.get('ean');
-		this.loader = this.loadingCtrl.create({
-			content: "Laddar..."
-		});
-
 		this.showLoading();
 		this.loadProduct(this.gtin);
 	}
@@ -97,6 +93,9 @@ export class ProductPage {
 	}
 
 	showLoading(): void {
+		this.loader = this.loadingCtrl.create({
+			content: "Laddar..."
+		});
 		this.loader.present();
 	}
 
@@ -168,6 +167,8 @@ export class ProductPage {
 		let modal = this.modalCtrl.create(FormModal, {"gtin": this.gtin});
 		modal.onDidDismiss(data => {
 			this.product = null;
+
+			this.showLoading();
 		    this.loadProduct(this.gtin);
 		});
 		modal.present();

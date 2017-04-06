@@ -103,7 +103,6 @@ export class ProductsPage {
 		this.productService.count(q, this.sort, 0)
 		.then(data => {
 			this.productcount = data;
-			console.log(this.productcount);
 		});
 	}
 
