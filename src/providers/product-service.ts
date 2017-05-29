@@ -72,7 +72,7 @@ export class ProductService {
 		let querystring = JSON.stringify(query);
 
 		return new Promise(resolve => {
-			this.http.get(this.API + '/category/?query=' + querystring + '&limit=' + limit)
+			this.http.get(this.API + '/category/?query=' + querystring + '&limit=' + limit + '&sort=name')
 				.map(res => res.json())
 				.subscribe(data => {
 					resolve(data);

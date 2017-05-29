@@ -72,11 +72,7 @@ export class ProductsPage {
 		let  query = { };
 		this.productService.loadCategory(query, 0)
 		.then(data => {
-<<<<<<< HEAD
-			this.productcount = data;
-=======
 			this.categories = data;
->>>>>>> Ny meny och förstasida med nyheter
 		});
 	}
 

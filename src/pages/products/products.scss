@@ -96,52 +96,12 @@ page-products {
 			margin: 15px;
 			width: calc(100% - 30px);
 		}
-
-<<<<<<< HEAD
-		button.item {
-			padding: 0 !important;
-
-			.item-inner {
-				padding: 8px 16px;
-			}
 			
-			h2 {
-				color: #222;
-				font-family: 'ITCBaileySansCom-Bold';
-				font-weight: 400 !important;
-				font-size: 1.2em !important;
-			}
-
-			ion-badge {
-				border: 1px solid #00D27B;
-				background: transparent !important;
-				color: #00D27B !important;
-				font-weight: 400 !important;
-			}
-
-			.brand {
-				margin: .5em 0 .25em;
-			}
-
-			.category {
-				border: none !important;
-				background: none;
-				padding-left: 0px;
-
-				color: #222 !important;
-			}
-
-			button {
-				ion-icon {
-					font-size: 20px;
-				}
-			}
-=======
 		ion-card-title {
 			font-family: 'ITCBaileySansCom-Bold';
 			font-weight: 400;
->>>>>>> Ny meny och förstasida med nyheter
 		}
+
 		button {
 			font-family: 'ITCBaileySansCom-Bold';
 			font-size: 1.5rem;
