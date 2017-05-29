@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { HomePage } from '../pages/home/home';
 
@@ -11,13 +11,16 @@ import { HomePage } from '../pages/home/home';
 export class Vegokoll {
   rootPage = HomePage;
 
-  constructor(platform: Platform) {
+  constructor(
+    platform: Platform,
+    private statusBar: StatusBar
+  ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      StatusBar.styleLightContent();
+      this.statusBar.styleLightContent();
       if (platform.is('android')) {
-		    StatusBar.backgroundColorByHexString("#00b4d2");
+		    this.statusBar.backgroundColorByHexString("#00b4d2");
 	    }
     });
   }

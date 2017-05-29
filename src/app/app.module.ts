@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { Vegokoll } from './app.component';
 import { AboutPage } from '../pages/about/about';
@@ -13,6 +16,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera } from '@ionic-native/camera';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
+import { Keyboard } from '@ionic-native/keyboard';
+import { StatusBar } from '@ionic-native/status-bar';
 
 @NgModule({
   declarations: [
@@ -25,6 +30,8 @@ import { File } from '@ionic-native/file';
     ProductsPage
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(Vegokoll, {
       backButtonText: ''
     })
@@ -45,7 +52,9 @@ import { File } from '@ionic-native/file';
     Camera,
     Transfer,
     TransferObject,
-    File
+    File,
+    Keyboard,
+    StatusBar
   ]
 })
 export class AppModule {}

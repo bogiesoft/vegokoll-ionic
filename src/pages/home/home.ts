@@ -17,14 +17,15 @@ export class HomePage {
   }
 
   scanBarcode(): void {
-    //push another page onto the history stack
-    //causing the nav controller to animate the new page in
-    
+    //test if ther is suport for cordova bascanner    
     this.barcodeScanner.scan().then((barcodeData) => {
       if( barcodeData.cancelled == 1 ) {
         return;
       } else if( barcodeData.text !== "" ) {
         let ean = barcodeData.text;
+        
+        //push another page onto the history stack
+        //causing the nav controller to animate the new page in
         this.navCtrl.push(ProductPage, {ean: ean});
       } else {
         alert('Oj, det gick inte att starta kameran.');

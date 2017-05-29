@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { AlertController, Content, LoadingController, NavController } from 'ionic-angular';
-import { Keyboard } from 'ionic-native';
+import { Keyboard } from '@ionic-native/keyboard';
 import { Http } from '@angular/http';
+
 import { ProductPage } from '../product/product';
 import { ProductService } from '../../providers/product-service';
 import 'rxjs/Rx';
@@ -26,7 +27,14 @@ export class ProductsPage {
 
 	public loader:any;
 
-	constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl: NavController, public http: Http, public productService: ProductService) {
+	constructor(
+		public alertCtrl: AlertController, 
+		public loadingCtrl: LoadingController, 
+		public navCtrl: NavController, 
+		public http: Http, 
+		public productService: ProductService,
+		private keyboard: Keyboard
+	) {
 		this.limit = 20;
 
 		this.loader = this.loadingCtrl.create({
@@ -71,7 +79,7 @@ export class ProductsPage {
 	}
 
 	hideKeyboard():void {
-		Keyboard.close()
+		this.keyboard.close()
 	}
 
 	loadProducts(infiniteScroll): void {
