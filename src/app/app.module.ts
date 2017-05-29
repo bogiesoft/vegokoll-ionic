@@ -8,9 +8,11 @@ import { AboutPage } from '../pages/about/about';
 import { ProductPage } from '../pages/product/product';
 import { HomePage } from '../pages/home/home';
 import { ProductsPage } from '../pages/products/products';
+import { ProductList } from '../pages/products/productlist.component';
 import { FormModal } from '../pages/product/modal-form';
 import { ImagesModal } from '../pages/product/modal-images';
 import { ProductService } from '../providers/product-service';
+import { FeedService } from '../providers/feed-service';
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera } from '@ionic-native/camera';
@@ -27,7 +29,8 @@ import { StatusBar } from '@ionic-native/status-bar';
     FormModal,
     ImagesModal,
     HomePage,
-    ProductsPage
+    ProductsPage,
+    ProductList
   ],
   imports: [
     BrowserModule,
@@ -44,10 +47,12 @@ import { StatusBar } from '@ionic-native/status-bar';
     ProductPage,
     FormModal,
     ImagesModal,
-    ProductsPage
+    ProductsPage,
+    ProductList
   ],
   providers: [
     ProductService,
+    FeedService,
     BarcodeScanner,
     Camera,
     Transfer,

@@ -1,42 +1,39 @@
 <ion-header>
 	<ion-navbar color="primary" border-bottom-no>
 		<ion-title>Sök bland produkter</ion-title>
-		<ion-buttons end>
-	      	<button ion-button (click)="showCheckbox()">
-	        	<ion-icon name="options"></ion-icon>
-	      	</button>
-	    </ion-buttons>
 	</ion-navbar>
 
 	<ion-toolbar color="primary" border-top-no border-bottom-no>
-		<form>
-			<ion-searchbar type="search" placeholder="Sök efter en produkt" (search)="searchProducts($event)" (ionClear)="searchProducts($event)"></ion-searchbar>
-		</form>
+		<div class="tabs">
+			<div class="tab" [ngClass]="{active: switch==='news'}" (click)="switchTo('news')">Nyheter</div>
+			<div *ngFor="let category of categories" class="tab" [ngClass]="{active: switch===category.code}" (click)="switchTo(category.code)">{{category.name}}</div>
+		</div>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content id="products-content" (ionScroll)="hideKeyboard()">
-	<ion-grid id="intro">
-		<ion-row>
-			<ion-col width-100>
-				<h2>{{productcount.count}}</h2>
-				<span>veganska produkter</span>
-			</ion-col>
-		</ion-row>
-	</ion-grid>
-  
-	<ion-list *ngIf="categories && categories.length > 0">
-
-		<button ion-item *ngFor="let product of products" padding (click)="showProduct(product.gtin)">
-			<h2>{{product.title}} <small>{{product.subtitle}}</small></h2>
-			<p class="brand">{{product.brand}}</p>
-			<ion-badge class="category" *ngIf="product.category">{{categoryNameByCode(product.category).name}}</ion-badge>
-			<ion-badge *ngIf="product.other.organic">Ekologisk</ion-badge>
-			<ion-badge *ngIf="product.ingredients.gluten_free">Glutenfritt</ion-badge>
-		</button>
-
-	</ion-list>
-	<ion-infinite-scroll (ionInfinite)="showMore($event)" *ngIf="products.length<count.count">
-  		<ion-infinite-scroll-content></ion-infinite-scroll-content>
- 	</ion-infinite-scroll>
+	<div [ngSwitch]="switch">
+		<div *ngSwitchCase="'news'">
+			<ion-card *ngFor="let item of feed.items">
+				<img [src]="findImage(item.description)"/>
+				
+				<ion-card-content>
+					<ion-card-title [innerHTML]="item.title"></ion-card-title>
+					<p [innerHTML]="stripExcerpt(item.description)"></p>
+				</ion-card-content>
+				<ion-row no-padding>
+					<ion-col text-center>
+						<button ion-button clear small color="primary">
+							<a [href]="item.link" target="_blank">Läs mer</a>
+						</button>
+					</ion-col>
+				</ion-row>
+			</ion-card>
+		</div>
+		<div *ngFor="let category of categories">
+			<div *ngSwitchCase="category.code">
+				<products-list [category]="category.code" ></products-list>
+			</div>
+		</div>
+	</div>
 </ion-content>

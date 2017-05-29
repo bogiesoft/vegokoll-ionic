@@ -24,8 +24,42 @@ page-products {
 		}
 
 		ion-toolbar {
+			padding: 0px !important;
+			margin-bottom: 0px;
+
 			.toolbar-background {
 				border: none;
+			}
+
+			.tabs {
+				height: 44px;
+
+				display: flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+
+				overflow-x: scroll;
+
+				.tab {
+					align-self: flex-end;
+					margin: 0 15px;
+					padding: 10px 0;
+					border-bottom: 3px solid transparent;
+
+					font-size: 1.7rem;
+					font-family: 'ITCBaileySansCom-Bold';
+					font-weight: 400;
+					color: #ffffff;
+					white-space: nowrap;
+
+					&.active {
+						border-bottom: 3px solid #ffffff;
+					}
+
+					&:last-child {
+						padding-right: 10px;
+					}
+				}
 			}
 		}
 	}
@@ -57,18 +91,13 @@ page-products {
 		}
 	}
 
-	ion-select {
-		display: inline-flex;
-	}
-
-	ion-list {
-		background-color: #ffffff;
-		margin-bottom: 0 !important;
-
-		ion-list-header {
-			background: #f2fbfd !important;
+	ion-card {
+		&.card-ios {
+			margin: 15px;
+			width: calc(100% - 30px);
 		}
 
+<<<<<<< HEAD
 		button.item {
 			padding: 0 !important;
 
@@ -107,27 +136,25 @@ page-products {
 					font-size: 20px;
 				}
 			}
+=======
+		ion-card-title {
+			font-family: 'ITCBaileySansCom-Bold';
+			font-weight: 400;
+>>>>>>> Ny meny och förstasida med nyheter
 		}
+		button {
+			font-family: 'ITCBaileySansCom-Bold';
+			font-size: 1.5rem;
+			font-weight: 400;
 
-		ion-item:last-of-type {
-			.item-inner {
-				border-bottom: none !important;
+			a {
+				font-size: 1.75rem;
+				text-decoration: none;
 			}
-		}
-
-		ion-item-divider {
-			border-top: 0.55px solid #c8c7cc;
-			background: #f2fbfd !important;
-
-			color: #7f7f7f !important;
-			font-size: 1.2rem !important;
-			font-weight: 500 !important;
-			letter-spacing: 0.1rem !important;
-			text-transform: uppercase !important;
 		}
 	}
 
-	.infinite-loading {
-		margin: 0;
+	ion-select {
+		display: inline-flex;
 	}
 }

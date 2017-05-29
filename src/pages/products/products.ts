@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Content, LoadingController, NavController } from 'ionic-angular';
+import { Content, NavController } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import { Http } from '@angular/http';
 
-import { ProductPage } from '../product/product';
-import { ProductService } from '../../providers/product-service';
 import 'rxjs/Rx';
+
+import { ProductService } from '../../providers/product-service';
+import { FeedService } from '../../providers/feed-service';
 
 @Component({
 	selector: 'page-products',
@@ -19,151 +20,78 @@ export class ProductsPage {
 	public productcount:any = {};
 	public categories:any = [];
 	public count:any = 0;
+	public switch:any = 'news';
 
 	public query:any = {};
 	public querycategory:any = {};
 	public limit:any = 20;
 	public sort:any = "title";
 
-	public loader:any;
+	public feed:any = [];
 
 	constructor(
-		public alertCtrl: AlertController, 
-		public loadingCtrl: LoadingController, 
 		public navCtrl: NavController, 
 		public http: Http, 
 		public productService: ProductService,
+		public feedService: FeedService,
 		private keyboard: Keyboard
-	) {
-		this.limit = 20;
+	) { }
 
-		this.loader = this.loadingCtrl.create({
-			content: "Laddar...",
-			dismissOnPageChange: false
-		});
-		this.loader.present();
-
+	ngOnInit() {
 		this.loadCategories();
-		this.loadProducts(null);
+		this.loadFeed();
+	}
+
+	loadFeed(): void {
+		this.feedService.getFeedContent()
+		.then(data => {
+			this.feed = data;
+		});
+	}
+
+	stripExcerpt( html: string): string {
+		html = html.replace(/<\/?[^>]+(>|$)/g, "");
+		if( html.split('.').length >= 1 ) {
+			html = html.split('. ')[0] + '.';
+		}
+		return html;
+	}
+
+	findImage(html: string): string {
+		var regex = /<img[^>]*src="([^"]*)"/g;
+
+		var arr, outp = [];
+		while ((arr = regex.exec(html))) {
+			outp.push(arr[1]);
+		}
+		return outp[0];
+
 	}
 
 	loadCategories(): void {
 		let  query = { };
 		this.productService.loadCategory(query, 0)
 		.then(data => {
+<<<<<<< HEAD
+			this.productcount = data;
+=======
 			this.categories = data;
+>>>>>>> Ny meny och förstasida med nyheter
 		});
-	}
-
-	searchProducts(event:any):void {
-		let searchterm = event.target.value;
-
-		this.content.scrollToTop();
-		this.limit = 20;
-
-		this.hideKeyboard();
-
-		if (searchterm && searchterm.trim() != '') {
-			this.query = {
-				"$or" : [
-					{ "title" : "~(" + searchterm + ")"},
-					{ "subtitle" : "~(" + searchterm + ")"},
-					{ "brand" : "~(" + searchterm + ")"}
-				]
-			};
-			this.loadProducts(null);
-		} else {
-			this.query = {};
-			this.loadProducts(null);
-		}
 	}
 
 	hideKeyboard():void {
 		this.keyboard.close()
 	}
 
-	loadProducts(infiniteScroll): void {
-
-		this.query["ingredients.contains_animal_milk"] = false;
-		this.query["ingredients.contains_eggs"] = false;
-		this.query["ingredients.contains_animal_ingredients"] = false;
-		this.query["ingredients.additives_may_come_from_animal_origin"] = false;
-
-		let q = {"$and": [this.query, this.querycategory, {"approved": true}]};
-
-
-		this.productService.load(q, this.sort, this.limit)
-		.then(data => {
-			this.products = data;
-
-			this.loader.dismissAll();
-
-			if(infiniteScroll != null){
-				infiniteScroll.complete();
-			}
-		});
-
-		this.productService.count(q, this.sort, this.limit)
-		.then(data => {
-			this.count = data;
-		});
-
-		this.productService.count(q, this.sort, 0)
-		.then(data => {
-			this.productcount = data;
-		});
-	}
-
-	showMore(infiniteScroll): void {
-		this.limit = this.limit + 20;
-
-		if( this.products.length < this.count.count ) {
-			this.loadProducts(infiniteScroll);
-		} else {
-			infiniteScroll.complete();
-		}
-	}
-
-	showProduct(ean): void {
-		this.navCtrl.push(ProductPage, {ean: ean});
+	switchTo(code: string): void {
+		this.content.scrollToTop();
+		this.switch = code;
 	}
 
 	categoryNameByCode(code) {
 		return this.categories.filter(function(v) {
 		    return v.code === code; // Filter out the appropriate one
 		})[0]
-	}
-
-	isVegan(product) {
-		if ( product.manufacturer_confirms_vegan || ( product.ingredients.additives_may_come_from_animal_origin != true && product.ingredients.contains_animal_additives != true && product.ingredients.contains_eggs != true && product.ingredients.contains_animal_milk != true && product.ingredients.contains_animal_ingredients != true ) ) {
-			return true;
-		}
-		return false;
-	}
-
-	showCheckbox() {
-		let options = {inputs:[]};
-		let querycategory = this.querycategory;
-
-		let checked = (null == querycategory.category ) ? true : false ;
-		options.inputs = [{ name : 'options', value: 'alla', label: 'Alla', type: 'radio', checked: checked }];
-
-    	this.categories.map(function(category){ 
-    		checked = (category.code == querycategory.category ) ? true : false ;
-		  options.inputs.push({ name : 'options', value: category.code, label: category.name, type: 'radio', checked: checked });
-		});
-
-		let alert = this.alertCtrl.create(options);
-
-		alert.setTitle('Visa katekorier');
-
-		alert.addButton({
-			text: 'Visa',
-			handler: data => {
-				this.querycategory = (data=="alla") ? {} : {"category": data};
-				this.loadProducts(null);
-			}
-		});
-		alert.present();
 	}
 }
